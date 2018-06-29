@@ -48,9 +48,6 @@ public class ContactsNewManagerFragment extends BaseFragment {
         super.showChildFragment(bundle);
         switch (mChildType) {
             case CHILD_TYPE_CONTACTS:
-
-
-
                 if (mContactsFragment == null) {
                     mContactsFragment = new ContactsFragment();
                     mContactsFragment.setPreFragment(this);

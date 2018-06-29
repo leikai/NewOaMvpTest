@@ -39,10 +39,6 @@ public class ContactsFragment extends BaseFragment {
     private String token;
     public List<DepartmentNewBean> mDepartments;//联系人分组集合
     public List<UserNewBean> mUsersList;//联系人分组集合
-
-
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +58,6 @@ public class ContactsFragment extends BaseFragment {
         spinnerCourtoa = mRootView.findViewById(R.id.spinner_courtoa);
         spinnerDepartment = mRootView.findViewById(R.id.spinner_department);
         rvUsers = mRootView.findViewById(R.id.rv_user);
-
-
 
     }
 
@@ -119,6 +113,9 @@ public class ContactsFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 主线程接收部门数据
+     */
     private Handler mUpdateGroupsListHandler = new Handler() {
         @Override
         public void dispatchMessage(Message msg) {
@@ -127,6 +124,11 @@ public class ContactsFragment extends BaseFragment {
 
         }
     };
+
+    /**
+     * 将显示部门数据
+     * @param mList
+     */
     private  void  setDateToView(List<DepartmentNewBean> mList){
         DepartmentAdapter departmentAdapter = new DepartmentAdapter(getActivity(), mList);
         //传入的参数分别为 Context , 未选中项的textview , 数据源List
@@ -151,17 +153,21 @@ public class ContactsFragment extends BaseFragment {
 
     }
 
+    /**
+     * 主线程接收人员数据
+     */
     private Handler mUpdateUsersListHandler = new Handler() {
         @Override
         public void dispatchMessage(Message msg) {
             mUsersList = (List<UserNewBean>) msg.obj;
             setDataToView();
             String departmentName = msg.getData().getString("departmentName");
-//            adapter.setContacts(list);
-//            adapter.notifyDataSetChanged();
-//            mSideBar.setVisibility(View.VISIBLE);
         }
     };
+
+    /**
+     * 将人员数据部署到页面
+     */
     private void setDataToView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvUsers.setLayoutManager(layoutManager);
@@ -238,8 +244,6 @@ public class ContactsFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(List<UserNewBean> users) {
-            // mRefreshContactsTask = null;
-            // mCustomProgress.stop();
             if (users != null) {
                 Message msg = mUpdateUsersListHandler.obtainMessage();
                 msg.obj = users;
