@@ -86,7 +86,12 @@ public class LoginModel implements ILoginModel {
                         }
                         emitter.onNext(resultStr );
                     }else {
+                        Log.e("resps",""+resps);
+                        emitter.onNext(resultStr );
                     }
+                }else{
+                    Log.e("resultStr",""+resultStr);
+                    emitter.onNext("null" );
                 }
                 Log.e("被观察者所在的线程：",Thread.currentThread().getName());
             }

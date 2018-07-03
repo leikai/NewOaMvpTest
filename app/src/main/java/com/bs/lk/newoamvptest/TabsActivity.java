@@ -232,7 +232,7 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
     private void hideAllFragment() {
         hideFragment(mHomePageManagerFragment);
         hideFragment(mMsgManagerFragment);
-        hideFragment(mContactsManagerFragment);
+        hideFragment(mContactsNewManagerFragment);
         hideFragment(mSettingManagerFragment);
     }
 

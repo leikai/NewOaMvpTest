@@ -169,16 +169,18 @@ public class ContactsFragment extends BaseFragment {
      * 将人员数据部署到页面
      */
     private void setDataToView() {
+        if (mPreFragment == null){
+            mPreFragment = (BaseFragment) getParentFragment();
+
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvUsers.setLayoutManager(layoutManager);
-        UsersAdapter usersAdapter = new UsersAdapter(mUsersList);
+        UsersAdapter usersAdapter = new UsersAdapter(mUsersList,mPreFragment);
         rvUsers.setAdapter(usersAdapter);
         rvUsers.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         usersAdapter.notifyDataSetChanged();
-//        adapter = new InvestTheerAdapter(context,list);
-//        mContactsListView.getRefreshableView().setAdapter(adapter);
-//        mSideBar.setListView(mContactsListView.getRefreshableView());
-//        initEvent();
+
+
     }
 
     //请求部门的数据

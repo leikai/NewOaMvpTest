@@ -35,7 +35,7 @@ public class LoginPresenter implements ILoginPresenter{
         final boolean[] result = {false};
         final int[] code = {0};
 
-        if (token ==null){
+        if ("null".equals(token)){
             loginView.onLoginResult(result[0], code[0],user.getUserName(),user.getUserPassword(),token);
         }else {
             result[0] = true;

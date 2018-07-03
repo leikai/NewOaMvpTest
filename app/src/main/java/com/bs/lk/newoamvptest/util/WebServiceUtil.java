@@ -94,7 +94,6 @@ public class WebServiceUtil {
      * @return
      */
     public  String createSession(UserNewBean user) {
-//        String serviceUrl = BASE_SERVER_URL + AWSSVC;
         String methodName = "createSession";
         SoapObject request = new SoapObject(NAMESPACE_TOKEN, methodName);
         JSONObject json = new JSONObject();
@@ -139,7 +138,6 @@ public class WebServiceUtil {
      */
     public UserNewBean getUserInfo(String username, String userOid) {
         UserNewBean user = null;
-//        String serviceUrl = BASE_SERVER_URL + AWSSVC;
         String methodName = "getUserInfo";
         SoapObject request = new SoapObject(NAMESPACE_TOKEN, methodName);
         JSONObject json = new JSONObject();
@@ -150,8 +148,6 @@ public class WebServiceUtil {
             if (userOid != null){
                 json.put("userOid", userOid);
             }
-//            json.put("token", token);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -223,13 +219,6 @@ public class WebServiceUtil {
                     Log.e("部门数据",""+resps.get(0));
 
                     return resps;
-//                    departments = new ArrayList<>();
-//                    JSONArray array = new JSONArray(resultStr);
-//                    for (int i = 0; i < array.length(); i++) {
-//                        DepartmentBean department = (DepartmentBean) DataParser.factory(DataParser
-//                                .PARSER_TYPE_DEPARTMENT).parser(array.getJSONObject(i));
-//                        departments.add(department);
-//                    }
                 }
             }
         } catch (Exception e) {
@@ -241,7 +230,6 @@ public class WebServiceUtil {
 
 
     public boolean getUserDepartmentInfo(UserNewBean user) {
-//        String serviceUrl = BASE_SERVER_URL + AWSSVC;
         String methodName = "getUserDepartmentInfo";
         SoapObject request = new SoapObject(NAMESPACE_TOKEN, methodName);
         JSONObject json = new JSONObject();
@@ -266,12 +254,6 @@ public class WebServiceUtil {
             if (envelope.getResponse() != null) {
                 SoapObject result = (SoapObject) envelope.bodyIn;
                 String resultStr = result.getPropertyAsString("return");
-//                if (resultIsNotEmpty(resultStr)) {
-//                    DepartmentBean departmentBean = (DepartmentBean) DataParser.factory(DataParser
-//                            .PARSER_TYPE_DEPARTMENT).parser(new JSONObject(resultStr));
-//                    user.setDepartment(departmentBean);
-//                    return true;
-//                }
                 return true;
             }
         } catch (Exception e) {
@@ -324,14 +306,6 @@ public class WebServiceUtil {
                     Log.e("人员数据",""+resps.get(0));
 
                     return resps;
-//                    JSONArray array = new JSONArray(resultStr);
-//                    users = new ArrayList<>();
-//                    for (int i = 0; i < array.length(); i++) {
-//                        JSONObject jsonObj = array.getJSONObject(i);
-//                        UserBean user = (UserBean) DataParser.factory(DataParser.PARSER_TYPE_USER)
-//                                .parser(jsonObj);
-//                        users.add(user);
-//                    }
                 }
             }
         } catch (Exception e) {

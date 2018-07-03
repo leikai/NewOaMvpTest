@@ -2,17 +2,21 @@ package com.bs.lk.newoamvptest.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.bean.UserNewBean;
+import com.bs.lk.newoamvptest.view.activity.fragment.BaseFragment;
+import com.bs.lk.newoamvptest.view.activity.fragment.ContactsNewManagerFragment;
+import com.bs.lk.newoamvptest.view.activity.fragment.UserDetailInfoFragment;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -20,9 +24,11 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     private Context mcontext;
     private List<UserNewBean> mUsersList;
+    private BaseFragment mPreFragment;
 
-    public UsersAdapter(List<UserNewBean> mUsersList) {
+    public UsersAdapter(List<UserNewBean> mUsersList,BaseFragment mPreFragment) {
         this.mUsersList = mUsersList;
+        this.mPreFragment= mPreFragment;
     }
 
     @NonNull
@@ -33,18 +39,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         }
         View view = LayoutInflater.from(mcontext).inflate(R.layout.user_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int position = holder.getAdapterPosition();
-//                UserNewBean fruit = mUsersList.get(position);
-////                Intent intent = new Intent(mcontext,FruitActivity.class);
-////                intent.putExtra(FruitActivity.FRUIT_NAME,fruit.getName());
-////                intent.putExtra(FruitActivity.FRUIT_IMAGE_ID,fruit.getImageId());
-////                mcontext.startActivity(intent);
-//            }
-//        });
-
+        holder.llUserItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                UserNewBean user = mUsersList.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putInt(BaseFragment.PARAM_CHILD_TYPE, ContactsNewManagerFragment.CHILD_TYPE_USERINFO);
+                bundle.putSerializable(UserDetailInfoFragment.PARAM_USER, user);
+                mPreFragment.showChildFragment(bundle);
+            }
+        });
         return holder;
     }
 
@@ -61,10 +66,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        LinearLayout llUserItem;
         ImageView userImage;
         TextView userName;
         public ViewHolder(View view){
             super(view);
+            llUserItem = view.findViewById(R.id.ll_user_item);
             userImage = view.findViewById(R.id.iv_head);
             userName = view.findViewById(R.id.tv_username);
         }
