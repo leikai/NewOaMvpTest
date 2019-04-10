@@ -29,6 +29,9 @@ public class DataFormat {
         if (!TextUtils.isEmpty(user.getOid())) {
             json.put(UserNewParser.OID, user.getOid());
         }
+        if (!TextUtils.isEmpty(user.getDeptcode())) {
+            json.put(UserNewParser.DEPTCODE, user.getDeptcode());
+        }
         if (!TextUtils.isEmpty(user.getDeptid())) {
             json.put(UserNewParser.DEPTID, user.getDeptid());
         }
@@ -63,7 +66,28 @@ public class DataFormat {
             json.put(UserNewParser.USERNAME, user.getUserName());
         }
         if (!TextUtils.isEmpty(user.getUserPassword())) {
-            json.put(UserNewParser.USERPASSWORD, user.getUserName());
+            json.put(UserNewParser.USERPASSWORD, user.getUserPassword());
+        }
+        if (!TextUtils.isEmpty(user.getOrgcode())) {
+            json.put(UserNewParser.ORGCODE, user.getOrgcode());
+        }
+        if (!TextUtils.isEmpty(user.getOrgid())) {
+            json.put(UserNewParser.ORGID, user.getOrgid());
+        }
+        if (!TextUtils.isEmpty(user.getOrgname())) {
+            json.put(UserNewParser.ORGNAME, user.getOrgname());
+        }
+        if (!TextUtils.isEmpty(user.getHandPassword())) {
+            json.put(UserNewParser.HANDPASSWORD, user.getHandPassword());
+        }
+        if (!TextUtils.isEmpty(user.getRelation())) {
+            json.put(UserNewParser.RELATION, user.getRelation());
+        }
+        if (!TextUtils.isEmpty(user.getSigninfo())) {
+            json.put(UserNewParser.SIGNINFO, user.getSigninfo());
+        }
+        if (!TextUtils.isEmpty(user.getSignpwd())) {
+            json.put(UserNewParser.SIGNPWD, user.getSignpwd());
         }
         return json;
     }

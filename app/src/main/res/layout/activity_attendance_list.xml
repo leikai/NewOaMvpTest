@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".view.activity.AttendanceListActivity">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+
+            >
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+
+                />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/iv_user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/tv_user_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_user_head"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_user_department"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_date_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="30dp"
+            />
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/contact_item_dividing_line"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_department"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/distance_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="距离目的地："
+            android:textColor="#000000"
+            android:layout_margin="10dp"/>
+        <RelativeLayout
+            android:id="@+id/arriver_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/restaurant_btbg_gray">
+            <TextView
+                android:id="@+id/arriver_timetv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="18:00:00"
+                android:layout_centerInParent="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/arriver_timetv"
+                android:layout_centerHorizontal="true"
+                android:text="打卡签到"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:id="@+id/ll_morning_to_work_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:orientation="horizontal"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_gry_morning_work_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_gray"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_blue_morning_work_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_blue"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_morning_work_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上午上班时间"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        />
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/arriver_bt_morning_work_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:background="@mipmap/restaurant_btbg_gray">
+
+                    <TextView
+                        android:id="@+id/arriver_timetv_morning_work_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="18:00:00"
+                        android:layout_centerInParent="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arriver_timetv_morning_work_card"
+                        android:layout_centerHorizontal="true"
+                        android:text="打卡签到"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_morning_work_card_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_morning_work_card_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_morning_work_card_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="更新打卡"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_morning_work_finish_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_gry_morning_work_finish_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_gray"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center"
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_blue_morning_work_finish_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_blue"
+                        android:layout_marginLeft="30dp"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_morning_work_finish_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上午下班时间"
+                        android:layout_marginLeft="5dp"
+
+                        />
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/arriver_bt_morning_work_finish_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:background="@mipmap/restaurant_btbg_gray">
+
+                    <TextView
+                        android:id="@+id/arriver_timetv_morning_work_finish_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="18:00:00"
+                        android:layout_centerInParent="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arriver_timetv_morning_work_finish_card"
+                        android:layout_centerHorizontal="true"
+                        android:text="打卡签到"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_morning_work_finish_card_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginTop="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_morning_work_finish_card_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_morning_work_finish_card_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="更新打卡"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_afternoon_to_work_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_gry_afternoon_work_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_gray"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center"
+
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_blue_afternoon_work_finish_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_blue"
+                        android:layout_marginLeft="30dp"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_afternoon_work_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="下午上班时间"
+                        android:layout_marginLeft="5dp"
+                        />
+
+
+
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/arriver_bt_afternoon_work_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/restaurant_btbg_gray">
+
+                    <TextView
+                        android:id="@+id/arriver_timetv_afternoon_work_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="18:00:00"
+                        android:layout_centerInParent="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arriver_timetv_afternoon_work_card"
+                        android:layout_centerHorizontal="true"
+                        android:text="打卡签到"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_afternoon_work_card_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="45dp"
+
+                    android:layout_marginTop="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_afternoon_work_card_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_afternoon_work_card_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="更新打卡"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_afternoon_work_finish_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_gry_afternoon_work_finish_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_gray"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center"
+
+                        />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_blue_afternoon_work_finish_finish_attendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/circle_blue"
+                        android:layout_marginLeft="30dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tv_afternoon_work_finish_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="下午下班时间"
+                        android:layout_marginLeft="5dp"
+                        />
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/arriver_bt_afternoon_work_finish_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/restaurant_btbg_gray">
+
+                    <TextView
+                        android:id="@+id/arriver_timetv_afternoon_work_finish_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:text="18:00:00"
+                        android:layout_centerInParent="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arriver_timetv_afternoon_work_finish_card"
+                        android:layout_centerHorizontal="true"
+                        android:text="打卡签到"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_afternoon_work_finish_card_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="45dp"
+
+                    android:layout_marginTop="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_afternoon_work_finish_card_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_afternoon_work_finish_card_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="更新打卡"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    />
+            </LinearLayout>
+
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

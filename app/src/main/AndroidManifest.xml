@@ -1,49 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bs.lk.newoamvptest">
-
     <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 这个权限用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" /> <!-- &lt;!&ndash; Required &ndash;&gt; -->
+    <!-- <permission -->
+    <!-- android:name="org.sxchinacourt.permission.JPUSH_MESSAGE" -->
+    <!-- android:protectionLevel="signature" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 访问网络，网络定位需要上网 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SD卡读取权限，用户写入离线定位数据 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-
-    <!-- Required -->
-    <permission
-        android:name="org.sxchinacourt.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- Required  一些系统要求的权限，如访问网络等 -->
-    <uses-permission android:name="org.sxchinacourt.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Required  一些系统要求的权限，如访问网络等 -->
+    <!-- <uses-permission android:name="org.sxchinacourt.permission.JPUSH_MESSAGE" /> -->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-    <!-- Optional for location -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Optional for location -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -53,8 +36,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
     <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> -->
     <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
@@ -68,11 +50,15 @@
         android:name=".CApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher_updata"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_updata"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.activity.NoticeWebActivity"></activity>
+        <activity android:name=".view.activity.AlreadyWebActivity" />
+        <activity android:name=".view.activity.TotoWebActivity" />
+        <activity android:name=".view.activity.ModifyPwdActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity android:name=".view.activity.SplashActivity">
@@ -81,19 +67,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="myproject.com"
+                    android:scheme="ckck" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TabsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
-            />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustNothing" />
         <activity android:name=".view.activity.SendSelectActivity" />
         <activity android:name=".view.activity.MsgActivity" />
-        <activity android:name=".view.activity.CabinetActivity" />
-        <activity android:name=".view.activity.FileDepositDetailNew1Activity" />
         <activity android:name=".view.activity.AssignActivity" />
-        <activity android:name=".view.activity.FileDepositedDataActivity" />
-        <activity android:name=".view.activity.FileReverseDetailNew1Activity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -105,11 +96,8 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".view.activity.FileReverseDataActivity" />
-        <activity android:name=".view.activity.WeidoorActivity" />
-        <activity android:name=".view.activity.NewsActivity" />
         <activity
-            android:name=".view.activity.Leave1Activity"
+            android:name=".view.activity.DailyAndWeeklyActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.activity.LeaveInformal1Activity"
@@ -122,13 +110,43 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="YXDqBTmrE6rf5qpQmDhtQTV8dfsaK4ag" />
+            android:value="Hv76MIzLgHItjsgTizwPyqdA3hcPxnG0" />
 
-        <activity android:name=".view.activity.SignInActivity"
-            android:theme="@style/SignTheme"
-            />
-        <activity android:name=".view.activity.SignNewActivity"
-            android:theme="@style/SignTheme"/>
+        <activity
+            android:name=".view.activity.SignInActivity"
+            android:theme="@style/SignTheme" />
+        <activity
+            android:name=".view.activity.SignNewActivity"
+            android:theme="@style/SignTheme" />
+        <activity android:name=".view.activity.SmartTableActivity" />
+        <activity android:name=".view.activity.AbNormalSmartTableActivity" />
+        <activity android:name=".view.activity.NormalAttendanceActivity" />
+        <activity android:name=".view.activity.AbNormalAttendanceActivity" />
+        <activity android:name=".view.activity.ModifyCourtOaListAddActivity" />
+        <activity android:name=".view.activity.ModifyCourtOaListDeleteActivity" />
+
+        <service
+            android:name=".service.CountDownService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".view.activity.SwitchAccountActivity" />
+        <activity android:name=".view.activity.SignOnActivity" />
+        <activity
+            android:name=".view.activity.AttendanceListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".view.activity.AttendanceStatisticsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".view.activity.AllAttendanceStatisticsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".view.activity.AllAttendanceStatisticsDetailActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".view.activity.AttendanceStatisticsDetailActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

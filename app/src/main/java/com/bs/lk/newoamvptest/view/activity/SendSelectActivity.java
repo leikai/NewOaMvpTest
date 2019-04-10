@@ -3,7 +3,6 @@ package com.bs.lk.newoamvptest.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -18,20 +17,23 @@ import com.bs.lk.newoamvptest.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 应用界面
+ */
 public class SendSelectActivity extends FragmentActivity implements View.OnClickListener {
 
-    @BindView(R.id.send_one_dongtai)
-    LinearLayout sendOneDongtai;
-    @BindView(R.id.send_one_zijin)
-    LinearLayout sendOneZijin;
-    @BindView(R.id.send_one_shebei)
-    LinearLayout sendOneRicheng;//日程
-    @BindView(R.id.send_one_rencai)
-    LinearLayout sendOneQiandao;//签到
-    @BindView(R.id.send_one_changdi)
-    LinearLayout sendOneChangdi;
-    @BindView(R.id.send_one_juben)
-    LinearLayout sendOneJuben;
+    @BindView(R.id.send_one_cabinet)
+    LinearLayout sendOneCabinet;
+    @BindView(R.id.send_one_message_machine)
+    LinearLayout sendOneMessageMachine;
+    @BindView(R.id.send_one_schedule)
+    LinearLayout sendOneSchedule;//日程
+    @BindView(R.id.send_one_attendance_card)
+    LinearLayout sendOneAttendanceCard;//签到
+    @BindView(R.id.send_one_personal_attendance_statistics)
+    LinearLayout sendOnePersonalAttendanceStatistics;
+    @BindView(R.id.send_one_department_attendance_statistics)
+    LinearLayout sendOneDepartmentAttendanceStatistics;
     @BindView(R.id.send_one_close_img)
     ImageView sendOneCloseImg;
     @BindView(R.id.send_tab_one)
@@ -75,17 +77,18 @@ public class SendSelectActivity extends FragmentActivity implements View.OnClick
         sendTabOne.setAnimation(moveToViewLocation());
 
 
-        sendOneDongtai.setOnClickListener(this);
-        sendOneZijin.setOnClickListener(this);
-
-        sendOneRicheng.setVisibility(View.VISIBLE);//日程
-        sendOneRicheng.setOnClickListener(this);
-        sendOneQiandao.setVisibility(View.VISIBLE);//签到
-        sendOneQiandao.setOnClickListener(this);
-        sendOneChangdi.setVisibility(View.INVISIBLE);
-        sendOneChangdi.setOnClickListener(this);
-        sendOneJuben.setVisibility(View.INVISIBLE);
-        sendOneJuben.setOnClickListener(this);
+        sendOneCabinet.setOnClickListener(this);
+        sendOneMessageMachine.setOnClickListener(this);
+        //日程
+        sendOneSchedule.setVisibility(View.VISIBLE);
+        sendOneSchedule.setOnClickListener(this);
+        //考勤打卡
+        sendOneAttendanceCard.setVisibility(View.VISIBLE);
+        sendOneAttendanceCard.setOnClickListener(this);
+        sendOnePersonalAttendanceStatistics.setVisibility(View.VISIBLE);
+        sendOnePersonalAttendanceStatistics.setOnClickListener(this);
+        sendOneDepartmentAttendanceStatistics.setVisibility(View.VISIBLE);
+        sendOneDepartmentAttendanceStatistics.setOnClickListener(this);
 
         sendOneCloseImg.setOnClickListener(this);
         sendTwoCloseImg.setOnClickListener(this);
@@ -107,91 +110,58 @@ public class SendSelectActivity extends FragmentActivity implements View.OnClick
                 sendTabOne.setVisibility(View.VISIBLE);
                 sendTabOne.setAnimation(moveToRightShow());
                 break;
-            case R.id.send_one_dongtai:
+            case R.id.send_one_cabinet:
 
 //                startActivity(new Intent(SendSelectActivity.this,CabinetActivity.class));
                 Toast.makeText(context, "跳转至云柜", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
-            case R.id.send_one_zijin:
+            case R.id.send_one_message_machine:
 //                startActivity(new Intent(SendSelectActivity.this,MachineActivity.class));
                 Toast.makeText(context, "跳转至留言机", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
-            case R.id.send_one_shebei://日程
-                sendTwoQiuImg.setImageResource(R.mipmap.pic_fabu_shebei_zl);
-                sendTwoChuImg.setImageResource(R.mipmap.pic_fabu_shebei_cz);
-                sendTwoQiuTv.setText("设备求租");
-                sendTwoChuTv.setText("设备出租");
-                sendTabOne.setVisibility(View.GONE);
-                sendTabOne.setAnimation(moveToLeftHide());
-                sendTabTwo.setVisibility(View.VISIBLE);
-                sendTabTwo.setAnimation(moveToLeftShow());
-                sendTwoQiu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "设备出租", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                sendTwoChu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "设备求租", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
+            case R.id.send_one_schedule://日程
+//                sendTwoQiuImg.setImageResource(R.mipmap.pic_fabu_shebei_zl);
+//                sendTwoChuImg.setImageResource(R.mipmap.pic_fabu_shebei_cz);
+//                sendTwoQiuTv.setText("设备求租");
+//                sendTwoChuTv.setText("设备出租");
+//                sendTabOne.setVisibility(View.GONE);
+//                sendTabOne.setAnimation(moveToLeftHide());
+//                sendTabTwo.setVisibility(View.VISIBLE);
+//                sendTabTwo.setAnimation(moveToLeftShow());
+//                sendTwoQiu.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(SendSelectActivity.this, "设备出租", Toast.LENGTH_SHORT).show();
+//                        finish();
+//                    }
+//                });
+//                sendTwoChu.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(SendSelectActivity.this, "设备求租", Toast.LENGTH_SHORT).show();
+//                        finish();
+//                    }
+//                });
+
+                Toast.makeText(context, "跳转至日程", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.send_one_rencai://签到
-               startActivity(new Intent(SendSelectActivity.this,SignInActivity.class));
+                //考勤打卡
+            case R.id.send_one_attendance_card:
+               startActivity(new Intent(SendSelectActivity.this,AttendanceListActivity.class));
+                Toast.makeText(context, "跳转至考勤打卡", Toast.LENGTH_SHORT).show();
+               break;
+               //考勤统计
+            case R.id.send_one_personal_attendance_statistics:
+                startActivity(new Intent(SendSelectActivity.this,AttendanceStatisticsActivity.class));
+                Toast.makeText(context, "跳转至考勤统计", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.send_one_changdi:
-                sendTwoQiuImg.setImageResource(R.mipmap.pic_fabu_changdi_zl);
-                sendTwoChuImg.setImageResource(R.mipmap.pic_fabu_changdi_cz);
-                sendTwoQiuTv.setText("场地求租");
-                sendTwoChuTv.setText("场地出租");
-                sendTabOne.setVisibility(View.GONE);
-                sendTabOne.setAnimation(moveToLeftHide());
-                sendTabTwo.setVisibility(View.VISIBLE);
-                sendTabTwo.setAnimation(moveToLeftShow());
-                sendTwoQiu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "场地求租", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                sendTwoChu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "场地出租", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                break;
-            case R.id.send_one_juben:
-                sendTwoQiuImg.setImageResource(R.mipmap.pic_fabu_juben_zj);
-                sendTwoChuImg.setImageResource(R.mipmap.pic_fabu_juben_cs);
-                sendTwoQiuTv.setText("剧本征集");
-                sendTwoChuTv.setText("剧本出售");
-                sendTabOne.setVisibility(View.GONE);
-                sendTabOne.setAnimation(moveToLeftHide());
-                sendTabTwo.setVisibility(View.VISIBLE);
-                sendTabTwo.setAnimation(moveToLeftShow());
-                sendTwoQiu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "剧本征集", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
-                sendTwoChu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SendSelectActivity.this, "剧本出售", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                });
+            case R.id.send_one_department_attendance_statistics:
+                Toast.makeText(context, "跳转至部门考勤统计", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(SendSelectActivity.this,AllAttendanceStatisticsActivity.class));
+
                 break;
             default:
                 break;

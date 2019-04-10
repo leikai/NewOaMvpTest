@@ -31,7 +31,7 @@ import com.bs.lk.newoamvptest.widget.CustomProgress;
 
 import java.util.Vector;
 
-public class UserDetailInfoFragment extends ContactsManagerFragment implements View.OnClickListener {
+public class UserDetailInfoFragment extends BaseFragment implements View.OnClickListener {
     public static final String PARAM_USER = "user";
     UserNewBean mUser;
     RefreshUserInfoTask mRefreshUserInfoTask;

@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +22,8 @@ import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -31,6 +35,10 @@ import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.util.file.FileAccessUtil;
 import com.bs.lk.newoamvptest.util.file.FileOpenHelper;
 import com.bs.lk.newoamvptest.widget.CustomProgress;
+import com.geek.thread.GeekThreadManager;
+import com.geek.thread.ThreadPriority;
+import com.geek.thread.ThreadType;
+import com.geek.thread.task.GeekThread;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,29 +46,47 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.bs.lk.newoamvptest.common.util.URLRoot.BASE_URL_H5_ROOT_CLIENT_V2;
+
+
+/**
+ * @author lk
+ */
 public class MsgFragment extends BaseFragment{
     private Context context;
     private int resId;
     private String ceshi;
     private WebView webviewMsg;
+    /**
+     * 下拉刷新
+     */
     private SwipeRefreshLayout swipeRefresh;
-
-
+    /**
+     * 网页加载进度
+     */
+    private ProgressBar pgl;
     private CustomProgress mCustomProgress;
-
     private ProgressBar mProgressBar;
     private GetDownloadFileUrlTask mGetDownloadFileUrlTask;
     private String mFileUrl;
-
     private boolean mInterceptFlag = false;
     private int mProgress;
-
     private Thread mDownLoadThread;
+
+    private GeekThread mDownLoadThreadNew;
+
+
     private Dialog mDownloadDialog;
-
     private String mFileName;
+    /**
+     * 从页面中获取目前H5所在的界面
+     */
+    private String pageLocationForH5 = "";
 
-    private String pageLocationForH5 = "";//从页面中获取目前H5所在的界面
+//    private String currentPageUrl = "http://111.53.181.200:8087/mcourtoa/moffice/sign/list_daiban.html?token=";
+
+    private String currentPageUrl = BASE_URL_H5_ROOT_CLIENT_V2+"/mcourtoa/moffice/sign/list_daiban.html?token=";
+
 
     private static final int PROGRESS_UPDATE = 1;
     private static final int DOWNLOAD_FINISHED = 2;
@@ -96,6 +122,7 @@ public class MsgFragment extends BaseFragment{
     protected void initFragment(@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.initFragment(container, savedInstanceState);
         mCustomProgress = (CustomProgress) mRootView.findViewById(R.id.loading);
+        pgl = (ProgressBar) mRootView.findViewById(R.id.progressBar1);
         webviewMsg = (WebView) mRootView.findViewById(R.id.fg_webview_msg);
         ceshi  = CApplication.getInstance().getCurrentToken();
         swipeRefresh = mRootView.findViewById(R.id.swipe_refresh);
@@ -108,32 +135,69 @@ public class MsgFragment extends BaseFragment{
         });
 
         clearWebViewCache();
-        webviewMsg.getSettings().setJavaScriptEnabled(true);//设置支持js
-        webviewMsg.addJavascriptInterface(new TodoTaskListFragment.TestJavaScriptInterface(),"android");
-        webviewMsg.getSettings().setDomStorageEnabled(true);//打开DOM存储API
-        webviewMsg.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);//设置缓存模式：不使用缓存
+
+        WebSettings webSettings = webviewMsg.getSettings();
+        //设置支持JS
+        webSettings.setJavaScriptEnabled(true);
+        //设置缓存模式：不使用缓存
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        //打开DOM存储API
+        webSettings.setDomStorageEnabled(true);
+
+        webSettings.setDatabaseEnabled(true);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setBuiltInZoomControls(true);
+
+        /**
+         * 用WebView显示图片，可使用这个参数 设置网页布局类型：
+         * 1、LayoutAlgorithm.NARROW_COLUMNS ：适应内容大小
+         * 2、LayoutAlgorithm.SINGLE_COLUMN : 适应屏幕，内容将自动缩放
+         */
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webSettings.setUseWideViewPort(true);
+        if(Build.VERSION.SDK_INT >= 19) {
+            webSettings.setLoadsImagesAutomatically(true);
+        } else {
+            webSettings.setLoadsImagesAutomatically(false);
+        }
+        webviewMsg.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        webviewMsg.setHorizontalScrollBarEnabled(true);
+        webviewMsg.requestFocus();
+
+
+
+
+
+
         webviewMsg.setWebChromeClient(new WebChromeClient(){
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-//                return super.onJsAlert(view, url, message, result);
                 pageLocationForH5 = message;
                 Log.e("pageLocationForH5",""+pageLocationForH5  );
                 result.confirm();
                 return true;
             }
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100){
+                    pgl.setVisibility(View.GONE);
+
+                }else {
+                    pgl.setVisibility(View.VISIBLE);
+                    pgl.setProgress(newProgress);
+                }
+            }
+
         });
+
         webviewMsg.setWebViewClient(new WebViewClient());
-        Log.e("取出来的token",""+ceshi);
         //-----------------------------------------------正式----------------------------------------------//
-        webviewMsg.loadUrl("http://111.53.181.200:8087/mcourtoa/moffice/sign/list_daiban.html?token="+ceshi);
+        currentPageUrl = currentPageUrl+ceshi;
+        Log.e("currentPageUrl",""+currentPageUrl);
+        webviewMsg.loadUrl(currentPageUrl);
         //--------------------------------------------finish--------------------------------------//
-
-//        webviewMsg.loadUrl("http://192.168.3.61:8080/mcourtoa/moffice/sign/list_daiban.html?token="+ceshi);
-//
-////        //--------------------------------------------ceshi--------------------------------------//
-//        webviewMsg.loadUrl("http://192.168.3.95:8080/mcourtoa/moffice/sign/list_daiban.html?token="+ceshi);
-//        //--------------------------------------------finish--------------------------------------//
-
         webviewMsg.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
@@ -142,8 +206,6 @@ public class MsgFragment extends BaseFragment{
                     mFileUrl = url;
                     mFileName = mFileUrl.substring(mFileUrl.length()-36);
                     showPromptDownloadDialog();
-
-//                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 }
             }
         });
@@ -152,9 +214,9 @@ public class MsgFragment extends BaseFragment{
     }
 
     private void refreshWebview() {
-        webviewMsg.loadUrl("http://111.53.181.200:8087/mcourtoa/moffice/sign/list_daiban.html?token="+ceshi);
+        webviewMsg.loadUrl(currentPageUrl);
         swipeRefresh.setRefreshing(false);
-    }
+}
 
 
     private void showPromptDownloadDialog() {
@@ -241,84 +303,135 @@ public class MsgFragment extends BaseFragment{
             mDownloadDialog = builder.create();
             mDownloadDialog.show();
         } catch (Throwable e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     private void downloadFile() {
-        mDownLoadThread = new Thread(mDownFileRunnable);
-        mDownLoadThread.start();
+//        mDownLoadThread = new Thread(mDownFileRunnable);
+//        mDownLoadThread.start();
+
+        GeekThreadManager.getInstance().execute(mDownLoadThreadNew, ThreadType.NORMAL_THREAD);
+        mDownLoadThreadNew = new GeekThread(ThreadPriority.NORMAL) {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    URL url = new URL(mFileUrl);
+                    HttpURLConnection conn = (HttpURLConnection) url
+                            .openConnection();
+                    conn.connect();
+                    int length = conn.getContentLength();
+                    InputStream is = conn.getInputStream();
+
+                    Log.e("lk",""+mFileUrl.substring(mFileUrl.length()-36));
+                    String filePath = "";
+                    filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName) ;
+                    File file = new File(filePath);
+                    file.createNewFile();
+                    file.setWritable(true);
+                    FileOutputStream fos = new FileOutputStream(file);
+                    int count = 0;
+                    byte buf[] = new byte[1024];
+                    int preProgress = mProgress;
+                    do {
+                        int numread = is.read(buf);
+                        count += numread;
+                        mProgress = (int) (((float) count / length) * 100);
+                        if (preProgress != mProgress) {
+                            // 更新进度
+                            mHandler.sendEmptyMessage(PROGRESS_UPDATE);
+                            preProgress = mProgress;
+                        }
+                        fos.write(buf, 0, numread);
+                        if (count == length) {
+                            mHandler.sendEmptyMessage(DOWNLOAD_FINISHED);
+                            break;
+                        }
+                        // 点击取消就停止下载.
+                    } while (!mInterceptFlag);
+                    fos.close();
+                    is.close();
+                } catch (Throwable e) {
+                    mInterceptFlag = true;
+                    mDownloadError.sendEmptyMessage(0);
+                }
+            }
+        };
+
+
+
+
+
     }
 
-    private Runnable mDownFileRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                URL url = new URL(mFileUrl);
-                HttpURLConnection conn = (HttpURLConnection) url
-                        .openConnection();
-                conn.connect();
-                int length = conn.getContentLength();
-                InputStream is = conn.getInputStream();
-
-                Log.e("lk",""+mFileUrl.substring(mFileUrl.length()-36));
-                String filePath = "";
-                if (mFileName.endsWith(".doc") ) {
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"1"+".doc") ;
-                }else if (mFileName.endsWith(".docx")){
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"2"+".docx") ;
-
-                }else if (mFileName.endsWith(".xls") ) {
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"3"+".xls") ;
-                }else if (mFileName.endsWith(".xlsx")){
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"4"+".xlsx") ;
-
-                }else if (mFileName.endsWith(".txt")) {
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"5"+".txt") ;
-                } else if (mFileName.endsWith(".pdf")) {
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"6"+".pdf") ;
-                } else if (mFileName.endsWith(".jpg") ) {
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"7"+".jpg") ;
-                }else if (mFileName.endsWith(".png")){
-                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"8"+".png") ;
-
-                }
-
-
-//                String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileUrl.substring(mFileUrl.length()-36)) ;
-                File file = new File(filePath);
-                file.createNewFile();
-                file.setWritable(true);
-                FileOutputStream fos = new FileOutputStream(file);
-                int count = 0;
-                byte buf[] = new byte[1024];
-                int preProgress = mProgress;
-                do {
-                    int numread = is.read(buf);
-                    count += numread;
-                    mProgress = (int) (((float) count / length) * 100);
-                    if (preProgress != mProgress) {
-                        // 更新进度
-                        mHandler.sendEmptyMessage(PROGRESS_UPDATE);
-                        preProgress = mProgress;
-                    }
-                    fos.write(buf, 0, numread);
-                    if (count == length) {
-                        mHandler.sendEmptyMessage(DOWNLOAD_FINISHED);
-                        break;
-                    }
-                } while (!mInterceptFlag);// 点击取消就停止下载.
-                fos.close();
-                is.close();
-            } catch (Throwable e) {
-                mInterceptFlag = true;
-                mDownloadError.sendEmptyMessage(0);
-            }
-        }
-    };
+//    private Runnable mDownFileRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            try {
+//                URL url = new URL(mFileUrl);
+//                HttpURLConnection conn = (HttpURLConnection) url
+//                        .openConnection();
+//                conn.connect();
+//                int length = conn.getContentLength();
+//                InputStream is = conn.getInputStream();
+//
+//                Log.e("lk",""+mFileUrl.substring(mFileUrl.length()-36));
+//                String filePath = "";
+//                if (mFileName.endsWith(".doc") ) {
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"1"+".doc") ;
+//                }else if (mFileName.endsWith(".docx")){
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"2"+".docx") ;
+//
+//                }else if (mFileName.endsWith(".xls") ) {
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"3"+".xls") ;
+//                }else if (mFileName.endsWith(".xlsx")){
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"4"+".xlsx") ;
+//
+//                }else if (mFileName.endsWith(".txt")) {
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"5"+".txt") ;
+//                } else if (mFileName.endsWith(".pdf")) {
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"6"+".pdf") ;
+//                } else if (mFileName.endsWith(".jpg") ) {
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"7"+".jpg") ;
+//                }else if (mFileName.endsWith(".png")){
+//                     filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"8"+".png") ;
+//
+//                }
+//                File file = new File(filePath);
+//                file.createNewFile();
+//                file.setWritable(true);
+//                FileOutputStream fos = new FileOutputStream(file);
+//                int count = 0;
+//                byte buf[] = new byte[1024];
+//                int preProgress = mProgress;
+//                do {
+//                    int numread = is.read(buf);
+//                    count += numread;
+//                    mProgress = (int) (((float) count / length) * 100);
+//                    if (preProgress != mProgress) {
+//                        // 更新进度
+//                        mHandler.sendEmptyMessage(PROGRESS_UPDATE);
+//                        preProgress = mProgress;
+//                    }
+//                    fos.write(buf, 0, numread);
+//                    if (count == length) {
+//                        mHandler.sendEmptyMessage(DOWNLOAD_FINISHED);
+//                        break;
+//                    }
+//                    // 点击取消就停止下载.
+//                } while (!mInterceptFlag);
+//                fos.close();
+//                is.close();
+//            } catch (Throwable e) {
+//                mInterceptFlag = true;
+//                mDownloadError.sendEmptyMessage(0);
+//            }
+//        }
+//    };
 
     private Handler mHandler = new Handler() {
+        @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case PROGRESS_UPDATE:
@@ -335,6 +448,7 @@ public class MsgFragment extends BaseFragment{
     };
 
     private Handler mDownloadError = new Handler() {
+        @Override
         public void handleMessage(Message msg) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("下载失败");
@@ -394,35 +508,35 @@ public class MsgFragment extends BaseFragment{
 
         Intent intent = null;
         if (mFileName.endsWith(".doc")) {
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"1"+".doc");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getWordFileIntent(getActivity(),file);
         }else if (mFileName.endsWith(".docx")){
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"2"+".docx");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getWordFileIntent(getActivity(),file);
         }else if (mFileName.endsWith(".xls")) {
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"3"+".xls");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getExcelFileIntent(getActivity(),file);
         }else if (mFileName.endsWith(".xlsx")){
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"4"+".xlsx");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getExcelFileIntent(getActivity(),file);
         }else if (mFileName.endsWith(".txt")) {
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"5"+".txt");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getTextFileIntent(getActivity(),file);
         } else if (mFileName.endsWith(".pdf")) {
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"6"+".pdf");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getPdfFileIntent(getActivity(),file);
         } else if (mFileName.endsWith(".jpg")  ) {
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"7"+".jpg");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getImageFileIntent(getActivity(),file);
         }else if (mFileName.endsWith(".png")){
-            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+"8"+".png");
+            String filePath = FileAccessUtil.getDirBasePath(FileAccessUtil.FILE_DIR+mFileName);
             File file = new File(filePath);
             intent = FileOpenHelper.getImageFileIntent(getActivity(),file);
         }
@@ -459,6 +573,7 @@ public class MsgFragment extends BaseFragment{
             e.printStackTrace();
         }
     }
+
 
     private static final String APP_CACAHE_DIRNAME = "/webcache";
     /**
@@ -514,4 +629,20 @@ public class MsgFragment extends BaseFragment{
             Log.e("", "delete file no exists " + file.getAbsolutePath());
         }
     }
+
+
+    @Override
+    public boolean onBackPressed() {
+        boolean handle = webviewMsg.canGoBack();
+        if (!webviewMsg.getUrl().equals(currentPageUrl)){
+            Log.e("handle",""+handle);
+            if (webviewMsg.canGoBack()){
+                webviewMsg.goBack();
+                currentPageUrl = webviewMsg.getOriginalUrl();
+                return true;
+            }
+        }
+        return super.onBackPressed();
+    }
+
 }

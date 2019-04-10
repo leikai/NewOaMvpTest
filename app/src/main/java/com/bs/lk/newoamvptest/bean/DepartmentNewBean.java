@@ -1,6 +1,17 @@
 package com.bs.lk.newoamvptest.bean;
 
-public class DepartmentNewBean {
+
+import org.litepal.LitePal;
+import org.litepal.crud.LitePalSupport;
+
+import java.util.List;
+
+/**
+ * @author lk
+ */
+public class DepartmentNewBean extends LitePalSupport{
+    private int id;
+
     private String deptName;
 
     private String orgtype;
@@ -30,6 +41,16 @@ public class DepartmentNewBean {
     private String note;
 
     private String oaid;
+
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setDeptName(String deptName){
         this.deptName = deptName;
@@ -121,4 +142,15 @@ public class DepartmentNewBean {
     public String getOaid(){
         return this.oaid;
     }
+
+    public List<UserNewBean> getUserNewBeanList(){
+        if (oid== null){
+            return LitePal.findAll(UserNewBean.class);
+        }else {
+            return LitePal.where("orgname = ? and deptid = ?",orgname,oid).find(UserNewBean.class);
+        }
+
+    }
+
+
 }

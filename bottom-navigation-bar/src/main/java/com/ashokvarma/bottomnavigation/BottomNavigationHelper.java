@@ -48,7 +48,6 @@ class BottomNavigationHelper {
         }
 
         result[0] = itemWidth;
-
         return result;
     }
 

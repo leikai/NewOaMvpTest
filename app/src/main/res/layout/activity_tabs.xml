@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
-            android:background="#057ad0">
+           >
         </com.ashokvarma.bottomnavigation.BottomNavigationBar>
 
     </RelativeLayout>

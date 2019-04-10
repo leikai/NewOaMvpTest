@@ -40,6 +40,12 @@
         android:layout_toLeftOf="@+id/title"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="-5dp"
+        android:visibility="gone"
+
         />
     <TextView
         android:id="@+id/title"
@@ -49,7 +55,7 @@
         android:layout_marginLeft="10dp"
         android:text="标题"
         android:textColor="#FFFFFFFF"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:singleLine="true"
         android:maxEms="9"
         android:ellipsize="end"

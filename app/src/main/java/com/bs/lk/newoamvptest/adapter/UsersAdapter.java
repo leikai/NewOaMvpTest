@@ -2,6 +2,7 @@ package com.bs.lk.newoamvptest.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.bean.UserNewBean;
+import com.bs.lk.newoamvptest.util.BitmapUtil;
 import com.bs.lk.newoamvptest.view.activity.fragment.BaseFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.ContactsNewManagerFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.UserDetailInfoFragment;
@@ -21,6 +23,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+/**
+ * 人员列表适配器
+ * @author lk
+ */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     private Context mcontext;
     private List<UserNewBean> mUsersList;
@@ -57,6 +63,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserNewBean userNewBean = mUsersList.get(position);
         holder.userName.setText(userNewBean.getEmpname());
+        Bitmap bp = BitmapUtil.GetUserImageByNickName(mcontext,userNewBean.getEmpname());
+        holder.userImage.setImageBitmap(bp);
 //        Glide.with(mcontext).load(userNewBean.getImageId()).into(holder.userImage);
     }
 

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_above="@+id/btn_confirm"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_courtoa_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:id="@+id/btn_add"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="增加"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_big"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="删除"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_big"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_modify"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="修改"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_big"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/btn_query"
+            android:layout_width="0dp"
+            android:layout_height="53dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_bg"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="查询"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_big"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -1,30 +1,26 @@
 package com.bs.lk.newoamvptest;
 
 import android.app.Application;
-
-//import org.sxchinacourt.bean.UserBean;
-//import org.sxchinacourt.cache.CSharedPreferences;
-//import org.sxchinacourt.util.WebServiceUtil;
-//import org.sxchinacourt.util.network.SSLRequest;
-
 import com.bs.lk.newoamvptest.bean.UserNewBean;
 import com.bs.lk.newoamvptest.cache.CSharedPreferences;
 import com.bs.lk.newoamvptest.util.WebServiceUtil;
 import com.bs.lk.newoamvptest.util.network.SSLRequest;
+
+import org.litepal.LitePal;
+import org.litepal.LitePalApplication;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
-//import cn.jpush.android.api.JPushInterface;
-
 
 /**
+ * @author
  * Created by baggio on 2017/2/6.
  */
 
-public class CApplication extends Application {
+public class CApplication extends LitePalApplication {
     public static CApplication mInstance;
     private UserNewBean mCurrentUser;
     private String mToken;
@@ -36,8 +32,9 @@ public class CApplication extends Application {
         mInstance = this;
 
         try {
-            SSLRequest.allowAllSSL(WebServiceUtil.BASE_SERVER_URL,
-                    getBaseContext());//证书验证
+            //证书验证
+            SSLRequest.allowAllSSL(WebServiceUtil.BASE_SERVER_URL_TOKEN,
+                    getBaseContext());
         } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -49,6 +46,7 @@ public class CApplication extends Application {
         }
         mCurrentUser = CSharedPreferences.getInstance().getCurrentUser();
         mToken = CSharedPreferences.getInstance().getToken();
+        LitePal.getDatabase();
     }
 
     public static CApplication getInstance() {

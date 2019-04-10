@@ -1,6 +1,7 @@
 package com.bs.lk.newoamvptest.view.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * @author lk
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_welcome)
@@ -31,6 +35,18 @@ public class SplashActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+        }
+        Intent intent1 = getIntent();
+        Uri uri=intent1.getData();
+        if(uri!=null) {
+            String name = uri.getQueryParameter("name");
+            String scheme = uri.getScheme();
+            String host = uri.getHost();
+            String port = uri.getPort() + "";
+            String path = uri.getPath();
+            String query = uri.getQuery();
+            Log.e("获得的数据name", "获得的数据name=" + name + "/r" + "scheme" + scheme + "/r" + "host" +
+                    "host" + host + "/r" + "port" + port + "/r" + "path" + path + "/r" + "query" + query);
         }
         handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -64,6 +80,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_welcome)
     public void onViewClicked() {
+
+
         Intent intent = new Intent();
         isJump = false;
         UserNewBean userNewBean = CApplication.getInstance().getCurrentUser();
@@ -79,7 +97,7 @@ public class SplashActivity extends AppCompatActivity {
         if (CApplication.getInstance().getCurrentUser() == null || CApplication.getInstance().getCurrentToken() == null) {
             intent.setClass(SplashActivity.this, LoginActivity.class);
         } else {
-            intent.setClass(SplashActivity.this, TabsActivity.class);
+            intent.setClass(SplashActivity.this, LoginActivity.class);
         }
         startActivity(intent);
         finish();

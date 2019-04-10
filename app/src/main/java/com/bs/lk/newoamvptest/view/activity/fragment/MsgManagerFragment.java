@@ -59,23 +59,15 @@ public class MsgManagerFragment extends BaseFragment {
         boolean handle = false;
         if (mFragmentStack.size() > 0) {
             handle = mCurChildFragment.onBackPressed();
-            if (!handle) {
+            if (handle) {
                 if (mCurChildFragment instanceof MsgFragment) {
-                    hideAllFragment();
-                    mMsgFragment = null;
-                    mFragmentStack.remove(mMsgFragment);
-                    mCurChildFragment = mFragmentStack.get(mFragmentStack.size() - 1);
-                    mMsgFragment = new MsgFragment(getActivity(), R.layout.fragment_invest_one);
-                    mMsgFragment.setPreFragment(this);
-                    addChildFragment(mMsgFragment,R.id.content);
-                    mCurChildFragment = mMsgFragment;
+                    return true;
                 }
                 return true;
             }
         }
-        return handle;
+        return super.onBackPressed();
     }
-
 
     /*当Fragment由可见状态变为不可见状态时保存Fragment的页面显示状态，以备再次加载时使用*/
     @Override

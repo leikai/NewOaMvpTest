@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +28,6 @@ import com.bs.lk.newoamvptest.CApplication;
 import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.util.file.FileAccessUtil;
 import com.bs.lk.newoamvptest.util.file.FileOpenHelper;
-import com.bs.lk.newoamvptest.view.activity.fragment.TodoTaskListFragment;
 import com.bs.lk.newoamvptest.widget.CustomProgress;
 
 import java.io.File;
@@ -72,7 +70,6 @@ public class LeaveInformal1Activity extends Activity {
         webviewMsg = (WebView) findViewById(R.id.fg_webview_msg);
         ceshi  = CApplication.getInstance().getCurrentToken();
         webviewMsg.getSettings().setJavaScriptEnabled(true);//设置支持js
-        webviewMsg.addJavascriptInterface(new TodoTaskListFragment.TestJavaScriptInterface(),"android");
         webviewMsg.getSettings().setDomStorageEnabled(true);//打开DOM存储API
         webviewMsg.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);//设置缓存模式：不使用缓存
         webviewMsg.setWebChromeClient(new WebChromeClient(){

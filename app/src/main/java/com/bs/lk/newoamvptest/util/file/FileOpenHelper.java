@@ -6,6 +6,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -45,12 +46,15 @@ public class FileOpenHelper {
 
         Uri uri=null;
         if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.bs.lk.newoamvptest.fileprovider",file);
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), context.getApplicationContext().getPackageName() + ".provider", file);
+            Log.e("uri:",uri.toString());
         } else {
             uri = Uri.fromFile(file);
         }
 
-//        Uri uri = Uri.fromFile(file);
+////        Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
+////
+//        uri = Uri.fromFile(file);
         intent.setDataAndType(uri, "application/pdf");
         return intent;
     }

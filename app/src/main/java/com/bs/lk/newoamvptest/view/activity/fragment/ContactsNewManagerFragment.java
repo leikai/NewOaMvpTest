@@ -80,6 +80,8 @@ public class ContactsNewManagerFragment extends BaseFragment {
                 }
                 mFragmentStack.remove(mCurChildFragment);
                 mCurChildFragment = mFragmentStack.get(mFragmentStack.size() - 1);
+
+
                 return true;
             }
         }

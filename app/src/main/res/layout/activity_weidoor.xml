@@ -12,10 +12,6 @@
         android:orientation="vertical"
         android:background="@color/white"
         >
-        <com.cjj.MaterialRefreshLayout
-            android:id="@+id/weodoor_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -72,31 +68,46 @@
                         android:layout_centerHorizontal="true" />
 
                 </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.cjj.MaterialRefreshLayout
 
-                    <com.bigkoo.convenientbanner.ConvenientBanner
-                        android:id="@+id/activity_weidoor_convenientBanner"
+                    android:id="@+id/weodoor_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    >
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        app:canLoop="true" />
-                </RelativeLayout>
-                <View style="@style/view_line_height_gray_5" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="本院要闻:"
-                    android:layout_marginLeft="12dp"
-                    />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                <ListView
-                    android:id="@+id/lv_weidoor_news"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></ListView>
+                            <com.bigkoo.convenientbanner.ConvenientBanner
+                                android:id="@+id/activity_weidoor_convenientBanner"
+                                android:layout_width="match_parent"
+                                android:layout_height="180dp"
+                                app:canLoop="true" />
+                        </RelativeLayout>
+                        <View style="@style/view_line_height_gray_5" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本院要闻:"
+                            android:layout_marginLeft="12dp"
+                            />
 
+                        <ListView
+                            android:id="@+id/lv_weidoor_news"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </ListView>
+                    </LinearLayout>
+
+                </com.cjj.MaterialRefreshLayout>
             </LinearLayout>
-        </com.cjj.MaterialRefreshLayout>
+
 
 
 

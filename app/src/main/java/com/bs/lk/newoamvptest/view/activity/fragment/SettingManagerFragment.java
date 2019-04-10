@@ -15,10 +15,17 @@ public class SettingManagerFragment extends BaseFragment {
     public static final int CHILD_TYPE_MODIFYPWD = 1;
     public static final int CHILD_TYPE_MODIFYUSERNAME = 2;
     public static final int CHILD_TYPE_MODIFYSERVERIP = 3;
+    public static final int CHILD_TYPE_MODIFYCOURTOALIST = 4;
+    /**
+     * 设置手势密码
+     */
+    public static final int CHILD_TYPE_MODIFYHANDLEPWD = 5;
     private SettingFragment mSettingFragment;
     private ModifyPasswordFragment mModifyPwdFragment;
+    private ModifyHandlePasswordFragment mModifyHandlePwdFragment;
     private ModifyUserNameFragment mModifyUserNameFragment;
     private ModifyServerIPFragment mModifyServerIPFragment;
+    private ModifyCourtOaListFragment mModifyCourtOaListFragment;
     private BaseFragment mCurChildFragment;
     private Vector<BaseFragment> mFragmentStack;
 
@@ -62,6 +69,15 @@ public class SettingManagerFragment extends BaseFragment {
                 hideFragment(mSettingFragment);
                 mCurChildFragment = mModifyPwdFragment;
                 break;
+            case CHILD_TYPE_MODIFYHANDLEPWD:
+                if (mModifyHandlePwdFragment == null) {
+                    mModifyHandlePwdFragment = new ModifyHandlePasswordFragment();
+                    mModifyHandlePwdFragment.setPreFragment(mSettingFragment);
+                }
+                addChildFragment(mModifyHandlePwdFragment, R.id.content);
+                hideFragment(mSettingFragment);
+                mCurChildFragment = mModifyHandlePwdFragment;
+                break;
             case CHILD_TYPE_MODIFYUSERNAME:
                 if (mModifyUserNameFragment == null) {
                     mModifyUserNameFragment = new ModifyUserNameFragment();
@@ -79,6 +95,15 @@ public class SettingManagerFragment extends BaseFragment {
                 addChildFragment(mModifyServerIPFragment, R.id.content);
                 hideFragment(mSettingFragment);
                 mCurChildFragment = mModifyServerIPFragment;
+                break;
+            case CHILD_TYPE_MODIFYCOURTOALIST:
+                if (mModifyCourtOaListFragment == null) {
+                    mModifyCourtOaListFragment = new ModifyCourtOaListFragment();
+                    mModifyCourtOaListFragment.setPreFragment(mSettingFragment);
+                }
+                addChildFragment(mModifyCourtOaListFragment, R.id.content);
+                hideFragment(mSettingFragment);
+                mCurChildFragment = mModifyCourtOaListFragment;
                 break;
         }
         mFragmentStack.add(mCurChildFragment);
@@ -100,6 +125,10 @@ public class SettingManagerFragment extends BaseFragment {
                     mModifyUserNameFragment = null;
                 } else if (mCurChildFragment instanceof ModifyPasswordFragment) {
                     mModifyPwdFragment = null;
+                } else if (mCurChildFragment instanceof ModifyHandlePasswordFragment) {
+                    mModifyHandlePwdFragment = null;
+                }else if (mCurChildFragment instanceof ModifyCourtOaListFragment) {
+                    mModifyCourtOaListFragment = null;
                 }
                 mFragmentStack.remove(mCurChildFragment);
                 mCurChildFragment = mFragmentStack.get(mFragmentStack.size() - 1);

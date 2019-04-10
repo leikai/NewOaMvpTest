@@ -5,6 +5,7 @@
 
     <color name="colorOverRed">#00A0E7</color>
     <color name="colorOverRedDark">#00A0E7</color>
+    <color name="blue">#057ad0</color>
     <!--#E43838-->
     <color name="colorAccent">#FF4081</color>
     <!--底部导航栏图片灰色-->
@@ -94,4 +95,7 @@
     <color name="des_color">#404346</color>
     <color name="color_ff4a57">#ff4a57</color>
     <color name="color_light_blue">#14acae</color>
+    <color name="tableBackground">#bae5f9</color>
+    <color name="tableBackgroundTitle">#00a0e9</color>
+    <color name="tableBackgroundCount">#bae5f9</color>
 </resources>

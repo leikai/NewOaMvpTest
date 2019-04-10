@@ -21,24 +21,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.bs.lk.newoamvptest.bean.UserNewBean;
+import com.bs.lk.newoamvptest.service.CountDownService;
 import com.bs.lk.newoamvptest.util.IConstant;
 import com.bs.lk.newoamvptest.util.file.FileAccessUtil;
 import com.bs.lk.newoamvptest.view.activity.LoginActivity;
-import com.bs.lk.newoamvptest.view.activity.MsgActivity;
 import com.bs.lk.newoamvptest.view.activity.SendSelectActivity;
+import com.bs.lk.newoamvptest.view.activity.UpdateManager;
 import com.bs.lk.newoamvptest.view.activity.fragment.BaseFragment;
-import com.bs.lk.newoamvptest.view.activity.fragment.ContactsManagerFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.ContactsNewManagerFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.HomePageManagerFragment;
-import com.bs.lk.newoamvptest.view.activity.fragment.MsgFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.MsgManagerFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.SettingManagerFragment;
 import com.bs.lk.newoamvptest.widget.CustomActionBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,40 +49,81 @@ import static com.bs.lk.newoamvptest.util.IConstant.REVISION_GRID_SIGN;
 import static com.bs.lk.newoamvptest.util.IConstant.REVISION_SIGN;
 import static com.bs.lk.newoamvptest.util.IConstant.REVISION_WORD_SIGN;
 
+/**
+ * @author lk
+ */
 public class TabsActivity extends AppCompatActivity implements BottomNavigationBar
         .OnTabSelectedListener{
-    public static final int REQUEST_EXTERNAL_STORAGE = 1; //获取存储权限
-    public static final int REQUEST_CALL_PHONE = 2;  //获取拨打电话权限
-    public static final int REQUEST_SEND_SMS = 3;    //获取发送短信权限
+    /**
+     * 获取存储权限
+     */
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    /**
+     * 获取拨打电话权限
+     */
+    public static final int REQUEST_CALL_PHONE = 2;
+    /**
+     * 获取发送短信权限
+     */
+    public static final int REQUEST_SEND_SMS = 3;
 
     @BindView(R.id.bottom_nav_content)
     LinearLayout bottomNavContent;
     @BindView(R.id.bottom_navigation_bar_container)
-    BottomNavigationBar bottomNavigationBarContainer;//底部导航栏
-
-    private CustomActionBar mActionBarView;  //自定义actionBar
-    private BottomNavigationItem mHomePage; //首页
-    private BottomNavigationItem mMsgItem;  //消息tab
-    private BottomNavigationItem mAppsItem;  //应用tab
-    private BottomNavigationItem mContactsItem;  //联系人tab
-    private BottomNavigationItem mSettingItem; //设置tab
+    /**
+     * 底部导航栏
+     */
+    BottomNavigationBar bottomNavigationBarContainer;
+    /**
+     * 自定义actionBar
+     */
+    private CustomActionBar mActionBarView;
+    /**
+     * 首页
+     */
+    private BottomNavigationItem mHomePage;
+    /**
+     * 消息tab
+     */
+    private BottomNavigationItem mMsgItem;
+    /**
+     * 应用tab
+     */
+    private BottomNavigationItem mAppsItem;
+    /**
+     * 联系人tab
+     */
+    private BottomNavigationItem mContactsItem;
+    //设置tab
+    private BottomNavigationItem mSettingItem;
     private BadgeItem badgeItem;
-
-    private HomePageManagerFragment mHomePageManagerFragment;//首页
-//    private MsgFragment mMsgFragment;//消息Fragment
+    /**
+     * 首页
+     */
+    private HomePageManagerFragment mHomePageManagerFragment;
     private MsgManagerFragment mMsgManagerFragment;
-    private ContactsManagerFragment mContactsManagerFragment;//联系人Fragment
-    private ContactsNewManagerFragment mContactsNewManagerFragment;//联系人Fragment
-    private SettingManagerFragment mSettingManagerFragment;//设置Fragment
-
-
-
+    //
+    /**
+     * 联系人Fragment碎片管理器
+     */
+    private ContactsNewManagerFragment mContactsNewManagerFragment;
+    /**
+     * 设置Fragment
+     */
+    private SettingManagerFragment mSettingManagerFragment;
     private BaseFragment mCurrentFragment;
-
-
-    private int bottomNavVarPosition = 0;//获取底部菜单栏目前选择的位置
-
-    private String token;//登录令牌
+    /**
+     * 获取底部菜单栏目前选择的位置
+     */
+    private int bottomNavVarPosition = 0;
+    /**
+     * 登录令牌
+     */
+    private String token;
+    /**
+     * 更新管理者
+     */
+    private UpdateManager mUpdateManager;
 
 
 
@@ -105,59 +147,100 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
         initData();
         initBottomNavBar();
         createRootDir();
-
+        startService(new Intent(TabsActivity.this, CountDownService.class));
+        mUpdateManager = new UpdateManager(this);
 
 
     }
 
     private void initBottomNavBar() {
-        bottomNavigationBarContainer.setAutoHideEnabled(true);//自动隐藏
+        //自动隐藏
+        bottomNavigationBarContainer.setAutoHideEnabled(true);
         bottomNavigationBarContainer.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBarContainer.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        bottomNavigationBarContainer.setBarBackgroundColor("#ffffff");//背景颜色
-        badgeItem = new BadgeItem().setBackgroundColor(Color.RED).setText("99").setHideOnSelect(false);//角标
+        //背景颜色
+        bottomNavigationBarContainer.setBarBackgroundColor("#ffffff");
+        //角标
+        badgeItem = new BadgeItem()
+//                .setBorderWidth(2)
+                .setBackgroundColor(Color.RED)
+                .setText("5")
+                .setHideOnSelect(false);
         mHomePage = new BottomNavigationItem(R.drawable.icon_nav_home_selected,"首页");
+        mHomePage.setActiveColorResource(R.color.blue);
+//        mHomePage.setInActiveColorResource(R.color.colorOverRedDark);
         mMsgItem = new BottomNavigationItem(R.drawable.icon_nav_news_selected, "消息");
+        mMsgItem.setActiveColorResource(R.color.blue);
+        //待与后台商量
 //        mMsgItem.setBadgeItem(badgeItem);
-        mAppsItem = new BottomNavigationItem(R.drawable.icon_nav_apply_selected, "应用");
+        mAppsItem = new BottomNavigationItem(R.drawable.icon_title, "应用");
+        mAppsItem.setActiveColorResource(R.color.blue);
         mContactsItem = new BottomNavigationItem(R.drawable.icon_nav_application_selected, "通讯录");
+        mContactsItem.setActiveColorResource(R.color.blue);
         mSettingItem = new BottomNavigationItem(R.drawable.icon_nav_mine_selected, "我");
-//        mHomePage.setInactiveIconResource(R.drawable.icon_nav_home_default);
+        mSettingItem.setActiveColorResource(R.color.blue);
         mMsgItem.setInactiveIconResource(R.drawable.icon_nav_news_default);
-        mAppsItem.setInactiveIconResource(R.drawable.icon_nav_apply_default);
+        mAppsItem.setInactiveIconResource(R.drawable.icon_title);
         mContactsItem.setInactiveIconResource(R.drawable.icon_nav_application_default);
         mSettingItem.setInactiveIconResource(R.drawable.icon_nav_mine_default);
         bottomNavigationBarContainer.addItem(mHomePage).addItem(mMsgItem).addItem(mAppsItem).addItem(mContactsItem).addItem(mSettingItem);
         bottomNavigationBarContainer.initialise();
         bottomNavigationBarContainer.setTabSelectedListener(this);
-        setDefaultFragment();//显示默认的Frag
-
-
+        //显示默认的Frag
+        setDefaultFragment();
     }
 
     private void initData() {
+
+
         token  = CApplication.getInstance().getCurrentToken();
         Log.e("取出来的token",""+token);
-        if (token ==null){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(TabsActivity.this);
-            dialog.setTitle("");
-            dialog.setMessage("您的身份验证令牌已过期，请点击确认，重新登录！");
-            dialog.setCancelable(false);
-            dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
 
+        List<String> orgNames = new ArrayList<>();
+        orgNames.add("山西省高级人民法院");
+        orgNames.add("晋中市中级人民法院");
+        orgNames.add("长治市中级人民法院");
+        orgNames.add("运城市中级人民法院");
+        orgNames.add("太原市中级人民法院");
+
+
+
+        UserNewBean user =  CApplication.getInstance().getCurrentUser();
+        if (user !=null){
+            String orgName = user.getOrgname();
+            Log.e("orgId",""+orgName);
+            if (!"admin".equals(user.getUserName())){
+                if (orgNames != null && orgNames.contains(user.getOrgname())){
+                    Log.e("","包含太原中院");
+                }else {
+                    Log.e("","不包含太原中院");
                 }
-            });
-            dialog.setNegativeButton("确认", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(TabsActivity.this,LoginActivity.class));
-                }
-            });
-            dialog.show();
+
+                if (token ==null){
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(TabsActivity.this);
+                    dialog.setTitle("");
+                    dialog.setMessage("您的身份验证令牌已过期，请点击确认，重新登录！");
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    dialog.setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(TabsActivity.this,LoginActivity.class));
+                        }
+                    });
+                    dialog.show();
 
 
+            }else {
+
+            }
+
+        }
         }
     }
 
@@ -190,31 +273,16 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
                 bottomNavVarPosition = bottomNavigationBarContainer.getCurrentSelectedPosition();
                 break;
             case 2:
-                //------------------------------修改------------------------------//
                 startActivity(new Intent(TabsActivity.this, SendSelectActivity.class));
                 bottomNavigationBarContainer.selectTab(bottomNavVarPosition);
-                //-------------------------------完----------------------------//
 
                 break;
             case 3:
                 hideAllFragment();
-
-                //-----------------新通讯录-------------//
                 if (mContactsNewManagerFragment == null) {
                     mContactsNewManagerFragment = new ContactsNewManagerFragment();
                 }
                 showFragment(mContactsNewManagerFragment);
-                //---------------finish---------------//
-
-
-//                //-------------------原通讯录------------//
-//                if (mContactsManagerFragment == null) {
-//                    mContactsManagerFragment = new ContactsManagerFragment();
-//                }
-//                showFragment(mContactsManagerFragment);
-//                //------------------finish-------------------//
-
-
                 bottomNavVarPosition = bottomNavigationBarContainer.getCurrentSelectedPosition();
                 break;
             case 4:
@@ -226,6 +294,8 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
 
                 bottomNavVarPosition = bottomNavigationBarContainer.getCurrentSelectedPosition();
                 break;
+                default:
+                    break;
         }
     }
 
@@ -236,7 +306,10 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
         hideFragment(mSettingManagerFragment);
     }
 
-    /*隐藏frag*/
+    /**
+     * 隐藏frag
+     * @param frag
+     */
     private void hideFragment(Fragment frag) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (frag != null && frag.isAdded()) {
@@ -253,17 +326,20 @@ public class TabsActivity extends AppCompatActivity implements BottomNavigationB
 
 
 
-    /*设置默认Fragment*/
+    /**
+     * 设置默认Fragment
+     * */
     private void setDefaultFragment() {
         if (mHomePageManagerFragment == null) {
             mHomePageManagerFragment = new HomePageManagerFragment();
         }
         showFragment(mHomePageManagerFragment);
-        /*默认显示msgFrag*/
     }
 
 
-    /*添加Frag*/
+    /**
+     * 添加Frag
+     * */
     private void addFragment(Fragment frag) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (frag != null && !frag.isAdded()) {

@@ -2,9 +2,19 @@ package com.bs.lk.newoamvptest.bean;
 
 import android.text.TextUtils;
 
+import org.litepal.crud.LitePalSupport;
+
 import java.io.Serializable;
 
-public class UserNewBean implements Serializable {
+/**
+ * 人员列表
+ * @author lk
+ */
+public class UserNewBean extends LitePalSupport implements Serializable  {
+    private int id;
+
+    private String deptcode;
+
     private String deptid;
 
     private String deptname;
@@ -19,18 +29,56 @@ public class UserNewBean implements Serializable {
 
     private String empname;
 
+    private String handPassword;
+
     private String note;
 
     private String oaid;
 
     private String oid;
 
+    private String orgcode;
+
+    private String orgid;
+
+    private String orgname;
+
+    private String relation;
+
     private String roleid;
+
+    private String signinfo;
+
+    private String signpwd;
 
     private String userName;
 
     private String userPassword;
 
+    private DepartmentNewBean departmentNewBean;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public DepartmentNewBean getDepartmentNewBean() {
+        return departmentNewBean;
+    }
+
+    public void setDepartmentNewBean(DepartmentNewBean departmentNewBean) {
+        this.departmentNewBean = departmentNewBean;
+    }
+
+    public void setDeptcode(String deptcode){
+        this.deptcode = deptcode;
+    }
+    public String getDeptcode(){
+        return this.deptcode;
+    }
     public void setDeptid(String deptid){
         this.deptid = deptid;
     }
@@ -73,6 +121,12 @@ public class UserNewBean implements Serializable {
     public String getEmpname(){
         return this.empname;
     }
+    public void setHandPassword(String handPassword){
+        this.handPassword = handPassword;
+    }
+    public String getHandPassword(){
+        return this.handPassword;
+    }
     public void setNote(String note){
         this.note = note;
     }
@@ -91,11 +145,47 @@ public class UserNewBean implements Serializable {
     public String getOid(){
         return this.oid;
     }
+    public void setOrgcode(String orgcode){
+        this.orgcode = orgcode;
+    }
+    public String getOrgcode(){
+        return this.orgcode;
+    }
+    public void setOrgid(String orgid){
+        this.orgid = orgid;
+    }
+    public String getOrgid(){
+        return this.orgid;
+    }
+    public void setOrgname(String orgname){
+        this.orgname = orgname;
+    }
+    public String getOrgname(){
+        return this.orgname;
+    }
+    public void setRelation(String relation){
+        this.relation = relation;
+    }
+    public String getRelation(){
+        return this.relation;
+    }
     public void setRoleid(String roleid){
         this.roleid = roleid;
     }
     public String getRoleid(){
         return this.roleid;
+    }
+    public void setSigninfo(String signinfo){
+        this.signinfo = signinfo;
+    }
+    public String getSigninfo(){
+        return this.signinfo;
+    }
+    public void setSignpwd(String signpwd){
+        this.signpwd = signpwd;
+    }
+    public String getSignpwd(){
+        return this.signpwd;
     }
     public void setUserName(String userName){
         this.userName = userName;
@@ -113,6 +203,9 @@ public class UserNewBean implements Serializable {
 
     public void copyUserInfo(UserNewBean user) {
         setOid(user.getOid());
+        if (!TextUtils.isEmpty(user.getDeptcode())) {
+            setDeptcode(user.getDeptcode());
+        }
         if (!TextUtils.isEmpty(user.getDeptid())) {
             setDeptid(user.getDeptid());
         }
@@ -149,5 +242,27 @@ public class UserNewBean implements Serializable {
         if (!TextUtils.isEmpty(user.getUserPassword())) {
             setUserPassword(user.getUserPassword());
         }
+        if (!TextUtils.isEmpty(user.getOrgcode())) {
+            setOrgcode(user.getOrgcode());
+        }
+        if (!TextUtils.isEmpty(user.getOrgid())) {
+            setOrgid(user.getOrgid());
+        }
+        if (!TextUtils.isEmpty(user.getOrgname())) {
+            setOrgname(user.getOrgname());
+        }
+        if (!TextUtils.isEmpty(user.getRelation())) {
+            setRelation(user.getRelation());
+        }
+        if (!TextUtils.isEmpty(user.getHandPassword())) {
+            setHandPassword(user.getHandPassword());
+        }
+        if (!TextUtils.isEmpty(user.getSigninfo())) {
+            setSigninfo(user.getSigninfo());
+        }
+        if (!TextUtils.isEmpty(user.getSignpwd())) {
+            setSignpwd(user.getSignpwd());
+        }
     }
+
 }

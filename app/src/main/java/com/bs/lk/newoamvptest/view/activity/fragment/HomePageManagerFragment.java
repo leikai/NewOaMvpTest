@@ -2,6 +2,7 @@ package com.bs.lk.newoamvptest.view.activity.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,34 +11,13 @@ import com.bs.lk.newoamvptest.R;
 
 import java.util.Vector;
 
+/**
+ * 首页碎片管理器
+ * @author lk
+ */
 public class HomePageManagerFragment extends BaseFragment{
     public static final int CHILD_TYPE_APP = 0;
-    public static final int CHILD_TYPE_TODOTASKLIST = 1;
-    public static final int CHILD_TYPE_NOTICETASKLIST = 2;
-    public static final int CHILD_TYPE_NOTICE_DETAIL = 3;
-    public static final int CHILD_TYPE_HISTORYTASKLIST = 4;
-    public static final int CHILD_TYPE_TASKMANAGER = 5;
-    public static final int CHILD_TYPE_CABINETTASKLIST = 6;//云柜
-    public static final int CHILD_TYPE_MESSAGEMACHINE = 7;//留言机
-
     private HomePageFragment mHomePageFragment;
-    private TodoTaskListFragment mTodoTaskListFragment;
-    private HistoryTaskListFragment mHistoryTaskListFragment;
-    private NoticeTaskListFragment mNoticeTaskListFragment;
-    private NoticeDetailFragment mNoticeDetailFragment;
-    private TaskManagerFragment mTaskManagerFragment;
-    private CabinetTaskListFragment mCabinetTaskListFragment;//云柜
-    private MessageMachineFragment mMessageMachineFragment;//留言机
-
-
-    private TodaTaskListManagerFragment mTodaTaskListManagerFragment;//待办模块
-
-    private HistoryTaskListManagerFragment mHistoryTaskListManagerFragment;//已办模块
-
-    private NoticeDetailManagerFragment mNoticeDetailManagerFragment;//通知公告
-
-
-
     private Vector<BaseFragment> mFragmentStack;
     private BaseFragment mCurChildFragment;
 
@@ -77,108 +57,10 @@ public class HomePageManagerFragment extends BaseFragment{
                 addChildFragment(mHomePageFragment, R.id.content);
                 mCurChildFragment = mHomePageFragment;
                 break;
-
-            case CHILD_TYPE_TODOTASKLIST:
-                if (mTodaTaskListManagerFragment == null) {
-                    mTodaTaskListManagerFragment = new TodaTaskListManagerFragment();
-                    mTodaTaskListManagerFragment.setPreFragment(mHomePageFragment);
-                }
-                mTodaTaskListManagerFragment.setArguments(bundle);
-                addChildFragment(mTodaTaskListManagerFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mTodaTaskListManagerFragment;
-                break;
-            case CHILD_TYPE_HISTORYTASKLIST:
-                if (mHistoryTaskListManagerFragment == null) {
-                    mHistoryTaskListManagerFragment = new HistoryTaskListManagerFragment();
-                    mHistoryTaskListManagerFragment.setPreFragment(mHomePageFragment);
-                }
-                mHistoryTaskListManagerFragment.setArguments(bundle);
-                addChildFragment(mHistoryTaskListManagerFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mHistoryTaskListManagerFragment;
-                break;
-            case CHILD_TYPE_NOTICETASKLIST:
-                if (mNoticeDetailManagerFragment == null) {
-                    mNoticeDetailManagerFragment = new NoticeDetailManagerFragment();
-                    mNoticeDetailManagerFragment.setPreFragment(mHomePageFragment);
-                }
-                mNoticeDetailManagerFragment.setArguments(bundle);
-                addChildFragment(mNoticeDetailManagerFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mNoticeDetailManagerFragment;
-
-                break;
-            case CHILD_TYPE_NOTICE_DETAIL:
-                if (mNoticeDetailFragment == null) {
-                    mNoticeDetailFragment = new NoticeDetailFragment();
-                    mNoticeDetailFragment.setPreFragment(mNoticeTaskListFragment);
-                }
-                mNoticeDetailFragment.setArguments(bundle);
-                addChildFragment(mNoticeDetailFragment, R.id.content);
-                hideFragment(mNoticeTaskListFragment);
-                mCurChildFragment = mNoticeDetailFragment;
-                break;
-            case CHILD_TYPE_TASKMANAGER:
-                if (mTaskManagerFragment == null) {
-                    mTaskManagerFragment = new TaskManagerFragment();
-                    mTaskManagerFragment.setPreFragment(mHomePageFragment);
-                }
-                addChildFragment(mTaskManagerFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mTaskManagerFragment;
-                break;
-            case CHILD_TYPE_CABINETTASKLIST:
-                if (mCabinetTaskListFragment == null) {
-                    mCabinetTaskListFragment = new CabinetTaskListFragment();
-                    mCabinetTaskListFragment.setPreFragment(mHomePageFragment);
-                }
-                addChildFragment(mCabinetTaskListFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mCabinetTaskListFragment;
-                break;
-            case CHILD_TYPE_MESSAGEMACHINE:
-                if (mMessageMachineFragment == null) {
-                    mMessageMachineFragment = new MessageMachineFragment();
-                    mMessageMachineFragment.setPreFragment(mHomePageFragment);
-                }
-                addChildFragment(mMessageMachineFragment, R.id.content);
-                hideFragment(mHomePageFragment);
-                mCurChildFragment = mMessageMachineFragment;
-                break;
+                default:
+                    break;
         }
         mFragmentStack.add(mCurChildFragment);
+        Log.e("mFragmentStack",""+mFragmentStack.size());
     }
-
-    @Override
-    public boolean onBackPressed() {
-        boolean handle = false;
-        if (mFragmentStack.size() > 1) {
-            if (mCurChildFragment instanceof TodaTaskListManagerFragment) {
-                mTodaTaskListManagerFragment = null;
-            }
-            handle = mCurChildFragment.onBackPressed();
-            if (!handle) {
-                if (mCurChildFragment instanceof HistoryTaskListManagerFragment) {
-                    mHistoryTaskListManagerFragment = null;
-                } else if (mCurChildFragment instanceof NoticeDetailManagerFragment) {
-                    mNoticeDetailManagerFragment = null;
-                } else if (mCurChildFragment instanceof NoticeDetailFragment) {
-                    mNoticeDetailFragment = null;
-                } else if (mCurChildFragment instanceof TaskManagerFragment) {
-                    mTaskManagerFragment = null;
-                }else if (mCurChildFragment instanceof CabinetTaskListFragment) {
-                    mCabinetTaskListFragment = null;
-                }else if (mCurChildFragment instanceof MessageMachineFragment) {
-                    mMessageMachineFragment = null;
-                }
-                mFragmentStack.remove(mCurChildFragment);
-                mCurChildFragment = mFragmentStack.get(mFragmentStack.size() - 1);
-                return true;
-            }
-        }
-        return handle;
-    }
-
-
 }

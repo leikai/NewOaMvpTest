@@ -77,7 +77,7 @@
             android:textColor="#abaaaa"
             android:gravity="center"
             />
-        <com.github.jdsjlzx.recyclerview.LRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

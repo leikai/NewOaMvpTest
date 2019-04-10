@@ -36,4 +36,8 @@ public class Contstants {
     public static final String OID_LINGSHI = "048086834bc8b7ba014bc912c6250050";
 
     public static final String OID_JINZHONG = "40289181454173d2014541e1cfdd0009";
+
+    public static final String OID_GAOYUAN = "402881e839e906330139e907eab80000";
+
+
 }

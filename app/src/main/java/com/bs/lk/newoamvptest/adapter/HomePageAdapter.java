@@ -1,5 +1,7 @@
 package com.bs.lk.newoamvptest.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,69 +12,73 @@ import android.widget.Toast;
 
 import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.bean.AppBean;
+import com.bs.lk.newoamvptest.bean.ToDoDatainfoBean;
+import com.bs.lk.newoamvptest.view.activity.AlreadyWebActivity;
+import com.bs.lk.newoamvptest.view.activity.NoticeWebActivity;
+import com.bs.lk.newoamvptest.view.activity.TotoWebActivity;
 import com.bs.lk.newoamvptest.view.activity.fragment.BaseFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.HomePageFragment;
-import com.bs.lk.newoamvptest.view.activity.fragment.HomePageManagerFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 首页适配器
+ * @author lk
+ */
 public class HomePageAdapter extends BaseAdapter {
     private final int TYPE_LEFT_ITEM = 0;
     private final int TYPE_RIGHT_ITEM = 1;
     private final int TYPE_COUNT = 2;
     private HomePageFragment mFragment;
+    private  Context context;
     List<AppBean> mApps;
-
-    public HomePageAdapter(HomePageFragment fragment, List<AppBean> apps) {
+    private List<ToDoDatainfoBean> toDoTasks = new ArrayList<>();
+    private String toDoTaskName = "待办事宜";
+    /**
+     * 判断四大块的左右，
+     * 方法：除以2 ，然后取余，余数为0为左，余数为1，则为右
+     */
+    private int judgeLeftOrRight = 2;
+    public HomePageAdapter(Context context,HomePageFragment fragment, List<AppBean> apps, List<ToDoDatainfoBean> toDoTasks) {
+        this.context = context;
         this.mFragment = fragment;
         this.mApps = apps;
+        this.toDoTasks = toDoTasks;
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Bundle bundle = new Bundle();
-            int app_type = 0;
+            int appType = 0;
             AppBean app = (AppBean) view.getTag();
             switch (app.getFragmentIndex()) {
                 case AppBean.FRAGMENT_TO_DO_TASK: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_TODOTASKLIST;
+                    context.startActivity(new Intent(context, TotoWebActivity.class));
                     break;
                 }
                 case AppBean.FRAGMENT_HISTORY_TASK: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_HISTORYTASKLIST;
+                    context.startActivity(new Intent(context, AlreadyWebActivity.class));
                     break;
                 }
                 case AppBean.FRAGMENT_NOTICE_TASK: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_NOTICETASKLIST;
-                    break;
-                }
-                case AppBean.FRAGMENT_MANAGER_TASK: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_TASKMANAGER;
-                    break;
-                }
-                case AppBean.FRAGMENT_CABINET_TASK: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_CABINETTASKLIST;
-                    break;
-                }
-                case AppBean.FRAGMENT_MESSAGE_MACHINE: {
-                    app_type = HomePageManagerFragment.CHILD_TYPE_MESSAGEMACHINE;
+                    context.startActivity(new Intent(context, NoticeWebActivity.class));
                     break;
                 }
                 default: {
                     Toast.makeText(mFragment.getContext(), "暂不支持该功能", Toast.LENGTH_LONG).show();
-//                    app_type = AppsManagerFragment.CHILD_TYPE_TODOTASKLIST;
                     break;
                 }
             }
-            bundle.putInt(BaseFragment.PARAM_CHILD_TYPE, app_type);
+            bundle.putInt(BaseFragment.PARAM_CHILD_TYPE, appType);
             mFragment.showChildFragment(bundle);
         }
     };
 
     @Override
     public int getItemViewType(int position) {
-        if (position % 2 == 0) {
+        if (position % judgeLeftOrRight == 0) {
             return TYPE_LEFT_ITEM;
         }
         return TYPE_RIGHT_ITEM;
@@ -102,23 +108,13 @@ public class HomePageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         AppViewHolder holder;
         if (view == null) {
-            /*switch (getItemViewType(i)) {
-                case TYPE_LEFT_ITEM:
-                    view = LayoutInflater.from(mFragment.getContext()).inflate(R.layout.app_left_item, null,
-                            false);
-                    break;
-                case TYPE_RIGHT_ITEM:
-                    view = LayoutInflater.from(mFragment.getContext()).inflate(R.layout
-                                    .app_right_item, null,
-                            false);
-                    break;
-            }*/
             view = LayoutInflater.from(mFragment.getContext()).inflate(R.layout.app_homepage_item, null,
                     false);
             holder = new AppViewHolder();
             holder.mContainerView = view.findViewById(R.id.home_page_view_ll_dbsy);
             holder.mAppNameView = (TextView) view.findViewById(R.id.tv_todo);
             holder.mAppIconView = (TextView) view.findViewById(R.id.tv_click);
+            holder.mTodoTaskBrdgeView = (TextView) view.findViewById(R.id.tv_todo_circle);
             view.setTag(holder);
         } else {
             holder = (AppViewHolder) view.getTag();
@@ -126,10 +122,13 @@ public class HomePageAdapter extends BaseAdapter {
         AppBean app = mApps.get(i);
         holder.mContainerView.setTag(app);
         holder.mContainerView.setOnClickListener(mOnClickListener);
-//        holder.mAppIconView.setImageResource(app.getResourceId());
         holder.mAppNameView.setText(app.getName());
         holder.mContainerView.setBackgroundResource(app.getResourceId());
-//        holder.mContainerView.setBackgroundColor(app.getResourceId());
+        if (toDoTaskName.equals(app.getName())){
+            holder.mTodoTaskBrdgeView.setText(String.valueOf(toDoTasks.size()));
+        }else {
+            holder.mTodoTaskBrdgeView.setVisibility(View.INVISIBLE);
+        }
         return view;
     }
 
@@ -137,6 +136,7 @@ public class HomePageAdapter extends BaseAdapter {
         private View mContainerView;
         private TextView mAppNameView;
         private TextView mAppIconView;
+        private TextView mTodoTaskBrdgeView;
     }
 
 }

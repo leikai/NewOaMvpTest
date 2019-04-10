@@ -34,7 +34,7 @@
             <TableRow>
 
                 <LinearLayout
-                    android:id="@+id/send_one_dongtai"
+                    android:id="@+id/send_one_cabinet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -58,7 +58,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/send_one_zijin"
+                    android:id="@+id/send_one_message_machine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -82,7 +82,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/send_one_shebei"
+                    android:id="@+id/send_one_schedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -109,7 +109,7 @@
             <TableRow>
 
                 <LinearLayout
-                    android:id="@+id/send_one_rencai"
+                    android:id="@+id/send_one_attendance_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -133,7 +133,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/send_one_changdi"
+                    android:id="@+id/send_one_personal_attendance_statistics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -152,12 +152,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="场地"
+                        android:text="个人考勤统计"
                         android:textSize="14dp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/send_one_juben"
+                    android:id="@+id/send_one_department_attendance_statistics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -176,7 +176,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="剧本"
+                        android:text="部门考勤统计"
                         android:textSize="14dp" />
                 </LinearLayout>
             </TableRow>

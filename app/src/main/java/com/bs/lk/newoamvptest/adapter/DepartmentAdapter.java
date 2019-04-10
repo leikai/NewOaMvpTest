@@ -11,6 +11,10 @@ import com.bs.lk.newoamvptest.bean.DepartmentNewBean;
 
 import java.util.List;
 
+/**
+ * 部门列表适配器
+ * @author lk
+ */
 public class DepartmentAdapter extends BaseAdapter {
     private Context context;
     private List<DepartmentNewBean> list;
@@ -38,18 +42,18 @@ public class DepartmentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null){
-            convertView = convertView.inflate(context, R.layout.adapter_department,null);
+            convertView = View.inflate(context, R.layout.adapter_department,null);
             viewHolder = new ViewHolder();
-            viewHolder.tv_section = (TextView) convertView.findViewById(R.id.tv_section);
+            viewHolder.tvSection = (TextView) convertView.findViewById(R.id.tv_section);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_section.setText(list.get(position).getDeptName());
+        viewHolder.tvSection.setText(list.get(position).getDeptName());
         return convertView;
     }
 
     class ViewHolder{
-        private TextView tv_section;
+        private TextView tvSection;
     }
 }
