@@ -1,6 +1,6 @@
 package com.bs.lk.newoamvptest.Interface;
 
-import com.bs.lk.newoamvptest.bean.SessionBean;
+import com.bs.lk.newoamvptest.bean.SessionGsonFormatBean;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface IOAInterfaceV3Service {
      *
      */
     @POST
-    Observable<SessionBean>getServiceAndroidversion(@Url String url,
-                                                    @QueryMap Map<String,String> params);
+    Observable<SessionGsonFormatBean>getServiceAndroidversion(@Url String url,
+                                                              @QueryMap Map<String,String> params);
 
 }

@@ -1,5 +1,6 @@
 package com.bs.lk.newoamvptest.view.activity.fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,10 @@ import com.bs.lk.newoamvptest.R;
 import java.util.Vector;
 
 
+/**
+ * 通信录碎片管理器
+ * @author asus
+ */
 public class ContactsNewManagerFragment extends BaseFragment {
     public static final int CHILD_TYPE_CONTACTS = 0;
     public static final int CHILD_TYPE_USERINFO = 1;
@@ -26,11 +31,10 @@ public class ContactsNewManagerFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, R.layout.fragment_contactsmanager_new, container, savedInstanceState);
     }
 
-    @Nullable
     @Override
     protected void initFragment(@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mChildType = CHILD_TYPE_CONTACTS;
@@ -65,6 +69,8 @@ public class ContactsNewManagerFragment extends BaseFragment {
                 hideFragment(mContactsFragment);
                 mCurChildFragment = mUserInfoFragment;
                 break;
+                default:
+                    break;
         }
         mFragmentStack.add(mCurChildFragment);
     }

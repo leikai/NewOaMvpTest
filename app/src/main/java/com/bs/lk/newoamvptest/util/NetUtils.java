@@ -19,16 +19,18 @@ import static com.bs.lk.newoamvptest.common.util.URLRoot.BASE_URL_ROOT_SERVICE;
 
 /**
  * Email：312607360@qq.com
- * Created by 温瑞壮 on 2017/9/14.
+ *
+ * @author 温瑞壮
+ * @date 2017/9/14
  * Description：
  */
 public class NetUtils {
 
     public static final int HTTP_200 = 200;
     public static final String TAG_POST = "Post方式";
-    public static final String  upDatePath  =  BASE_URL_ROOT_SERVICE + "/gz/document";
+    public static final String  UPDATE_PATH  =  BASE_URL_ROOT_SERVICE + "/gz/document";
 
-    public static final String  loginPath   =  BASE_URL_H5_ROOT_CLIENT_V3 + "/bo_dev/login_login";
+    public static final String  LOGIN_PATH   =  BASE_URL_H5_ROOT_CLIENT_V3 + "/bo_dev/login_login";
 
     /**EE
      * 描述：判断网络是否有效.
@@ -89,7 +91,9 @@ public class NetUtils {
         try {
             List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+                if (!"wlan0".equalsIgnoreCase(nif.getName())) {
+                    continue;
+                }
 
                 byte[] macBytes = nif.getHardwareAddress();
                 if (macBytes == null) {

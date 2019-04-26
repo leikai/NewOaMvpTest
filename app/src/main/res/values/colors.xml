@@ -98,4 +98,8 @@
     <color name="tableBackground">#bae5f9</color>
     <color name="tableBackgroundTitle">#00a0e9</color>
     <color name="tableBackgroundCount">#bae5f9</color>
+    <!--日历-->
+    <color name="date_1">#F24949</color>
+    <color name="date_2">#40000000</color>
+
 </resources>

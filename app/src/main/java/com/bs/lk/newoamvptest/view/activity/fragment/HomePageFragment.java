@@ -23,12 +23,15 @@ import com.bigkoo.convenientbanner.holder.Holder;
 import com.bs.lk.newoamvptest.CApplication;
 import com.bs.lk.newoamvptest.R;
 import com.bs.lk.newoamvptest.adapter.HomePageAdapter;
+import com.bs.lk.newoamvptest.adapter.NotificationAdapter;
 import com.bs.lk.newoamvptest.bean.AppBean;
 import com.bs.lk.newoamvptest.bean.BannerBean;
 import com.bs.lk.newoamvptest.bean.MessageEvent;
 import com.bs.lk.newoamvptest.bean.NewsBean;
+import com.bs.lk.newoamvptest.bean.NotificationAnnouncementBean;
 import com.bs.lk.newoamvptest.bean.ToDoDataRootBean;
 import com.bs.lk.newoamvptest.bean.ToDoDatainfoBean;
+import com.bs.lk.newoamvptest.bean.UserNewBean;
 import com.bs.lk.newoamvptest.presenter.HomePageNewsPresenter;
 import com.bs.lk.newoamvptest.presenter.IHomePageNewsPresenter;
 import com.bs.lk.newoamvptest.util.WebServiceUtil;
@@ -86,13 +89,16 @@ public class HomePageFragment extends BaseFragment implements IHomePageNewsView 
      */
     private String taskListJson;
     private String token;
+    private UserNewBean user;
     private ArrayList<AppBean> apps;
+    private List<NotificationAnnouncementBean> toDoDatainfoListProtogenesis;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = CApplication.getInstance().getCurrentToken();
+        user = CApplication.getInstance().getCurrentUser();
         mTitle = "百斯奥格移动办公平台";
         mLogo = View.GONE;
         mShowBtnBack = View.INVISIBLE;
@@ -132,7 +138,7 @@ public class HomePageFragment extends BaseFragment implements IHomePageNewsView 
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setReverseLayout(false);
         rvHomepageWeidoorRecycleView.setLayoutManager(layoutManager);
-        rvHomepageWeidoorRecycleView.setVisibility(View.GONE);
+        rvHomepageWeidoorRecycleView.setVisibility(View.VISIBLE);
 
         //开始自动翻页
         convenientBanner.setPages(new CBViewHolderCreator() {
@@ -185,6 +191,34 @@ public class HomePageFragment extends BaseFragment implements IHomePageNewsView 
             @Override
             public void run() {
                 initTaskCount();
+                String resultStr = WebServiceUtil.getInstance().getTzggAll(user.getOid());
+                Log.e("resultStr",""+resultStr);
+                if (resultStr!=null){
+                    toDoDatainfoListProtogenesis = new ArrayList<NotificationAnnouncementBean>(JSONArray.parseArray(resultStr,NotificationAnnouncementBean.class));
+                }
+                final List<NotificationAnnouncementBean> notificationAnnouncementBeanList = new ArrayList<>();
+                if(toDoDatainfoListProtogenesis == null){
+                    NotificationAnnouncementBean notificationAnnouncementBean = new NotificationAnnouncementBean();
+                    notificationAnnouncementBean.setTitle("暂无通知信息");
+                    notificationAnnouncementBeanList.add(notificationAnnouncementBean);
+                }else {
+                    if (toDoDatainfoListProtogenesis.size()<5){
+                        for (int i=0; i<toDoDatainfoListProtogenesis.size();i++){
+                            notificationAnnouncementBeanList.add(toDoDatainfoListProtogenesis.get(i));
+                        }
+                    }else {
+                        for (int i=0; i<5;i++){
+                            notificationAnnouncementBeanList.add(toDoDatainfoListProtogenesis.get(i));
+                        }
+                    }
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        NotificationAdapter newsListAdapter = new NotificationAdapter(getContext(),notificationAnnouncementBeanList);
+                        rvHomepageWeidoorRecycleView.setAdapter(newsListAdapter);
+                    }
+                });
             }
         }, ThreadType.NORMAL_THREAD);
     }

@@ -2,15 +2,12 @@ package com.bs.lk.newoamvptest.presenter;
 
 import android.util.Log;
 
-import com.bs.lk.newoamvptest.CApplication;
 import com.bs.lk.newoamvptest.base.mvp.ApiCallBack;
-import com.bs.lk.newoamvptest.bean.SessionBean;
+import com.bs.lk.newoamvptest.bean.SessionGsonFormatBean;
 import com.bs.lk.newoamvptest.bean.UserNewBean;
 import com.bs.lk.newoamvptest.model.ILoginModel;
 import com.bs.lk.newoamvptest.model.LoginModel;
 import com.bs.lk.newoamvptest.view.activity.ILoginView;
-
-import io.reactivex.disposables.Disposable;
 
 public class LoginPresenter extends ILoginPresenter {
     private ILoginView loginView;
@@ -34,9 +31,9 @@ public class LoginPresenter extends ILoginPresenter {
         user.setUserName(name);
         user.setUserPassword(password);
         loginModel.doLoginData(name,password);
-        addSubscription(loginModel.loadAndroidVersion("http://47.92.241.228:40/gz/document",0),new ApiCallBack<SessionBean>(){
+        addSubscription(loginModel.loadAndroidVersion("http://47.92.241.228:40/gz/document",0),new ApiCallBack<SessionGsonFormatBean>(){
             @Override
-            public void onSuccess(SessionBean modelBean) {
+            public void onSuccess(SessionGsonFormatBean modelBean) {
                 Log.e("RxJava + retrofit","实践成功");
             }
 

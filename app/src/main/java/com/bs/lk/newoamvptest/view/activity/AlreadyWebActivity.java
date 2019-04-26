@@ -37,6 +37,9 @@ import java.net.URL;
 
 import static com.bs.lk.newoamvptest.common.util.URLRoot.BASE_URL_H5_ROOT_CLIENT_V2;
 
+/**
+ * @author lk
+ */
 public class AlreadyWebActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private WebView webView;

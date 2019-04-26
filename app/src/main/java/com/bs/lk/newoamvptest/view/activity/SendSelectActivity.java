@@ -122,29 +122,9 @@ public class SendSelectActivity extends FragmentActivity implements View.OnClick
                 finish();
                 break;
             case R.id.send_one_schedule://日程
-//                sendTwoQiuImg.setImageResource(R.mipmap.pic_fabu_shebei_zl);
-//                sendTwoChuImg.setImageResource(R.mipmap.pic_fabu_shebei_cz);
-//                sendTwoQiuTv.setText("设备求租");
-//                sendTwoChuTv.setText("设备出租");
-//                sendTabOne.setVisibility(View.GONE);
-//                sendTabOne.setAnimation(moveToLeftHide());
-//                sendTabTwo.setVisibility(View.VISIBLE);
-//                sendTabTwo.setAnimation(moveToLeftShow());
-//                sendTwoQiu.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(SendSelectActivity.this, "设备出租", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                    }
-//                });
-//                sendTwoChu.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(SendSelectActivity.this, "设备求租", Toast.LENGTH_SHORT).show();
-//                        finish();
-//                    }
-//                });
 
+                startActivity(new Intent(SendSelectActivity.this,CalendarActivity.class));
+                finish();
                 Toast.makeText(context, "跳转至日程", Toast.LENGTH_SHORT).show();
                 break;
                 //考勤打卡

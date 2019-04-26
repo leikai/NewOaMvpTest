@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -32,14 +33,13 @@ import com.bs.lk.newoamvptest.bean.UserNewBean;
 import com.bs.lk.newoamvptest.util.PinYin.PinYinUtil;
 import com.bs.lk.newoamvptest.util.WebServiceUtil;
 import org.litepal.LitePal;
-import java.text.CollationKey;
-import java.text.Collator;
-import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
+
+import static com.bs.lk.newoamvptest.R.id.et_search;
 
 
 /**
@@ -53,7 +53,7 @@ public class ContactsFragment extends BaseFragment {
     /**
      * 文字图片的颜色值
      */
-    public static final String[] ImageBgColor={
+    public static final String[] IMAGE_BG_COLOR ={
             "#568AAD",
             "#17c295",
             "#4DA9EB",
@@ -68,25 +68,16 @@ public class ContactsFragment extends BaseFragment {
      * 人员列表
      */
     private RecyclerView rvUsers;
-    private RefreshGroupTask mRefreshGroupTask;
     private RefreshContactsTask mRefreshContactsTask;
-    private ImageView ivSearch;
     private EditText etSearch;
     private TextView tvEmpty;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    /**
-     * 当前登录人的个人信息
-     */
-    private UserNewBean user;
     private String token;
     /**
      * 法院ID
      */
     private String orgId;
-    /**
-     * 法院名称
-     */
-    private String orgName;
     /**
      * 部门分组集合
      */
@@ -99,13 +90,6 @@ public class ContactsFragment extends BaseFragment {
     private UsersAdapter usersAdapter;
     private static final String TAG = "Constraints";
 
-    /**
-     * 删除数据库数据
-     */
-    private Button btnDeleteDB;
-
-
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,52 +101,35 @@ public class ContactsFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return onCreateView(inflater, R.layout.fragment_contacts, container, savedInstanceState);
     }
 
-    @Nullable
     @Override
     protected void initFragment(@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         tvCourtoaName = mRootView.findViewById(R.id.tv_courtoa_name);
         spinnerDepartment = mRootView.findViewById(R.id.spinner_department);
         tvEmpty = mRootView.findViewById(R.id.tv_empty);
         rvUsers = mRootView.findViewById(R.id.rv_user);
-        ivSearch = mRootView.findViewById(R.id.iv_search);
-        etSearch = mRootView.findViewById(R.id.et_search);
-        btnDeleteDB = mRootView.findViewById(R.id.btn_delete_db);
+        etSearch = mRootView.findViewById(et_search);
+
+        Button btnDeleteDB = mRootView.findViewById(R.id.btn_delete_db);
+        mSwipeRefreshLayout = mRootView.findViewById(R.id.swipe_refresh_content);
         btnDeleteDB.setVisibility(View.GONE);
+
 
     }
 
     @Override
     protected void initData() {
         token = CApplication.getInstance().getCurrentToken();
-        user = CApplication.getInstance().getCurrentUser();
-        Log.d(TAG, "initData: "+user.getEmpname());
+        UserNewBean user = CApplication.getInstance().getCurrentUser();
+        Log.d(TAG, "initData: "+ user.getEmpname());
         String courtoaName = user.getOrgname();
         tvCourtoaName.setText(courtoaName);
-        //查询数据库中的数据
-        mDepartments = LitePal.where("orgname = ?",courtoaName).find(DepartmentNewBean.class);
+        RefreshGroupTask mRefreshGroupTask = new RefreshGroupTask(user.getOrgid());
+        mRefreshGroupTask.execute();
 
-        if (mDepartments.size() == 0){
-            mRefreshGroupTask = new RefreshGroupTask(user.getOrgid());
-            mRefreshGroupTask.execute();
-        }else {
-            setDeptData();
-        }
-    }
-
-    private void setDeptData() {
-        DepartmentNewBean departmentNewBean = new DepartmentNewBean();
-        departmentNewBean.setDeptName("所有部门");
-        departmentNewBean.setDeptPid("");
-        orgId = mDepartments.get(1).getOrgid();
-        orgName = mDepartments.get(1).getOrgname();
-        departmentNewBean.setOrgid(orgId);
-        departmentNewBean.setOrgname(orgName);
-        mDepartments.add(0,departmentNewBean);
-        setDateToView(mDepartments);
     }
 
     /**
@@ -177,7 +144,7 @@ public class ContactsFragment extends BaseFragment {
             departmentNewBean.setDeptName("所有部门");
             departmentNewBean.setDeptPid("");
             orgId = mDepartments.get(1).getOrgid();
-            orgName = mDepartments.get(1).getOrgname();
+            String orgName = mDepartments.get(1).getOrgname();
             departmentNewBean.setOrgid(orgId);
             departmentNewBean.setOrgname(orgName);
             mDepartments.add(0,departmentNewBean);
@@ -188,7 +155,7 @@ public class ContactsFragment extends BaseFragment {
 
     /**
      * 将显示部门数据
-     * @param mList
+     * @param mList  部门数据
      */
     private  void  setDateToView(final List<DepartmentNewBean> mList){
         DepartmentAdapter departmentAdapter = new DepartmentAdapter(getActivity(), mList);
@@ -212,12 +179,14 @@ public class ContactsFragment extends BaseFragment {
                 Log.e("所属法院人员",""+mUsersList.size());
                 int ceshi = mUsersList.size();
                 Log.e("部门人员数据",""+ceshi);
-                if (mUsersList.size() == 0){
+                mRefreshContactsTask = new RefreshContactsTask(null,departmentId,departmentName,orgId);
+                mRefreshContactsTask.execute();
+                mSwipeRefreshLayout.setOnRefreshListener(() -> {
+                    //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
                     mRefreshContactsTask = new RefreshContactsTask(null,departmentId,departmentName,orgId);
                     mRefreshContactsTask.execute();
-                }else {
-                    setDataToView();
-                }
+                    mSwipeRefreshLayout.setRefreshing(false);
+                });
 
 
             }
@@ -243,7 +212,6 @@ public class ContactsFragment extends BaseFragment {
                 mUsersList.addAll(lists);
             }
             setDataToView();
-            String departmentName = msg.getData().getString("departmentName");
         }
     };
 
@@ -270,7 +238,7 @@ public class ContactsFragment extends BaseFragment {
                 usersAdapter = new UsersAdapter(mUsersList,mPreFragment);
                 rvUsers.setAdapter(usersAdapter);
 
-                rvUsers.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+                rvUsers.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()),DividerItemDecoration.VERTICAL));
 
             }else {
                 int i = mUsersList.size();
@@ -281,11 +249,8 @@ public class ContactsFragment extends BaseFragment {
 
 
 
-        etSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        etSearch.setOnClickListener(v -> {
 
-            }
         });
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -299,9 +264,7 @@ public class ContactsFragment extends BaseFragment {
                 Log.e("ceshi",""+ceshi);
                 List<DepartmentNewBean> departments =  LitePal.findAll(DepartmentNewBean.class);
                 //判断数据库中的部门数据不为空，则从数据库中查询数据
-                if (departments.size() != 0){
-
-                }
+                departments.size();
                 mRefreshContactsTask = new RefreshContactsTask(ceshi,null,null,orgId);
                 mRefreshContactsTask.execute();
             }
@@ -315,7 +278,8 @@ public class ContactsFragment extends BaseFragment {
     /**
      * 请求部门的数据
      */
-    private class RefreshGroupTask extends AsyncTask<Void, Void, List<DepartmentNewBean>> {
+    @SuppressLint("StaticFieldLeak")
+    protected class RefreshGroupTask extends AsyncTask<Void, Void, List<DepartmentNewBean>> {
         String mCourtoaName;
 
         RefreshGroupTask(String courtoaOid) {
@@ -352,14 +316,15 @@ public class ContactsFragment extends BaseFragment {
     /**
      * 请求联系人数据
      */
+    @SuppressLint("StaticFieldLeak")
     private class RefreshContactsTask extends AsyncTask<Void, Void, List<UserNewBean>> {
 
-        String mUserName = "";
-        String mDepartmentId = "";
-        String mDepartmentName = "";
-        String mCourtId = "";
+        String mUserName;
+        String mDepartmentId;
+        String mDepartmentName;
+        String mCourtId;
 
-        public RefreshContactsTask(String userName, String departmentId, String departmentName, String orgId) {
+        RefreshContactsTask(String userName, String departmentId, String departmentName, String orgId) {
             mUserName = userName;
             mDepartmentId = departmentId;
             mDepartmentName = departmentName;
@@ -412,24 +377,6 @@ public class ContactsFragment extends BaseFragment {
         }
 
     }
-
-    private class AlphabetComparator implements Comparator<UserNewBean> {
-        private RuleBasedCollator collator;
-
-        public AlphabetComparator() {
-            collator = (RuleBasedCollator) Collator
-                    .getInstance(Locale.CHINA);
-        }
-
-        @Override
-        public int compare(UserNewBean a1, UserNewBean a2) {
-            CollationKey c1 = collator.getCollationKey(a1.getUserName());
-            CollationKey c2 = collator.getCollationKey(a2.getUserName());
-            return collator.compare(((CollationKey) c1).getSourceString(),
-                    ((CollationKey) c2).getSourceString());
-        }
-    }
-
 
 
     @Override

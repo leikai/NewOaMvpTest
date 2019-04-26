@@ -15,4 +15,7 @@
         <attr name="borderWidth" format="dimension" />
         <attr name="borderColor" format="integer" />
     </declare-styleable>
+    <declare-styleable name="CircleTextView">
+        <attr name="text" format="string"></attr>
+    </declare-styleable>
 </resources>

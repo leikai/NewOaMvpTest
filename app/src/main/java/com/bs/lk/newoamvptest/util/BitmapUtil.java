@@ -24,7 +24,7 @@ public class BitmapUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);// 抗锯齿
         Canvas canvas = new Canvas(bitmap);
         int a= (int)(Math.random()*6);
-        paint.setColor(Color.parseColor(ContactsFragment.ImageBgColor[a]));
+        paint.setColor(Color.parseColor(ContactsFragment.IMAGE_BG_COLOR[a]));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(40, 40, 40, paint);
         paint.setColor(Color.WHITE);

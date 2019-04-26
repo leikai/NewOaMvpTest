@@ -4,15 +4,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.bs.lk.newoamvptest.CApplication;
 import com.bs.lk.newoamvptest.Interface.IOAInterfaceV3Service;
-import com.bs.lk.newoamvptest.bean.SessionBean;
+import com.bs.lk.newoamvptest.bean.SessionGsonFormatBean;
 import com.bs.lk.newoamvptest.bean.TokenRoot;
 import com.bs.lk.newoamvptest.bean.UserNewBean;
 import com.bs.lk.newoamvptest.bean.UserParamsBean;
 import com.bs.lk.newoamvptest.presenter.ILoginPresenter;
-import com.bs.lk.newoamvptest.util.GsonUtil;
 import com.bs.lk.newoamvptest.util.NetUtils;
 import com.bs.lk.newoamvptest.util.WebServiceUtil;
 import com.google.gson.Gson;
@@ -27,10 +25,12 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.bs.lk.newoamvptest.util.NetUtils.loginPath;
+import static com.bs.lk.newoamvptest.util.NetUtils.LOGIN_PATH;
 
+/**
+ * @author lk
+ */
 public class LoginModel extends ILoginModel {
     private ILoginPresenter loginPresenter;
     private String loginResult;
@@ -47,7 +47,7 @@ public class LoginModel extends ILoginModel {
     }
 
     @Override
-    public Observable<SessionBean> loadAndroidVersion(String url, int type) {
+    public Observable<SessionGsonFormatBean> loadAndroidVersion(String url, int type) {
         Map<String, String> map = new HashMap<>();
         return service.getServiceAndroidversion(url,map);
     }
@@ -104,10 +104,10 @@ public class LoginModel extends ILoginModel {
                 Gson gson = new Gson();
                 String jsonObjString = gson.toJson(userParamsBean);
                 try {
-                    String v3Session = NetUtils.requestByPost(jsonObjString,loginPath);
+                    String v3Session = NetUtils.requestByPost(jsonObjString,LOGIN_PATH);
                     Log.e("v3Session",v3Session);
-                    SessionBean sessionBean = JSONObject.parseObject(v3Session,SessionBean.class);
-                    sessionId = sessionBean.getSessionid();
+                    SessionGsonFormatBean  sessionGsonFormatBean = gson.fromJson(v3Session,SessionGsonFormatBean.class);
+                    sessionId = sessionGsonFormatBean.getSessionid();
                     Log.e("ceshi",sessionId);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();

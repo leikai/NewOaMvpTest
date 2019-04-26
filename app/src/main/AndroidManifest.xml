@@ -43,11 +43,12 @@
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
 
     <application
-        android:name=".CApplication"
+        android:name="com.bs.lk.newoamvptest.CApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
@@ -55,7 +56,9 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.NoticeWebActivity"></activity>
+        <activity android:name=".view.activity.NotificationActivity"></activity>
+        <activity android:name=".view.activity.CalendarActivity" />
+        <activity android:name=".view.activity.NoticeWebActivity" />
         <activity android:name=".view.activity.AlreadyWebActivity" />
         <activity android:name=".view.activity.TotoWebActivity" />
         <activity android:name=".view.activity.ModifyPwdActivity" />
@@ -147,6 +150,19 @@
         <activity
             android:name=".view.activity.AttendanceStatisticsDetailActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".view.activity.AddPlanActivity"
+            android:exported="true"
+            />
+
+        <activity android:name=".view.activity.RingActivity" />
+        <activity android:name=".view.activity.ScheduleActivity" />
+
+        <receiver android:name=".RingReceived">
+            <intent-filter>
+                <action android:name="com.example.mycalender.Ring" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

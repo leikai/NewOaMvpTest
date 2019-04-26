@@ -22,7 +22,7 @@ import com.geek.thread.ThreadPriority;
 import com.geek.thread.ThreadType;
 import com.geek.thread.task.GeekRunnable;
 
-import static com.bs.lk.newoamvptest.util.NetUtils.loginPath;
+import static com.bs.lk.newoamvptest.util.NetUtils.LOGIN_PATH;
 
 public class SettingFragment extends BaseFragment implements View.OnClickListener {
     private UserNewBean userCurrent;

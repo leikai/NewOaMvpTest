@@ -3,7 +3,6 @@
     <dbname value = "CourtOa" ></dbname>
     <version value = "1" ></version>
     <list>
-
         <mapping class = "com.bs.lk.newoamvptest.bean.CourtOaUsageStatementBean"></mapping>
         <mapping class = "com.bs.lk.newoamvptest.bean.DepartmentNewBean"></mapping>
         <mapping class="com.bs.lk.newoamvptest.bean.UserNewBean"></mapping>
@@ -11,7 +10,6 @@
         <mapping class="com.bs.lk.newoamvptest.bean.AttendanceDataBean"></mapping>
         <mapping class="com.bs.lk.newoamvptest.bean.AttendanceShiftsBean"></mapping>
         <mapping class = "com.bs.lk.newoamvptest.bean.ToDoDatainfoBean"></mapping>
-
-
+        <mapping class = "com.bs.lk.newoamvptest.bean.Schedual"></mapping>
     </list>
 </litepal>

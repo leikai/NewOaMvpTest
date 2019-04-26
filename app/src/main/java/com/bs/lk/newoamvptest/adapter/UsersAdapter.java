@@ -1,7 +1,6 @@
 package com.bs.lk.newoamvptest.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,8 +18,6 @@ import com.bs.lk.newoamvptest.util.BitmapUtil;
 import com.bs.lk.newoamvptest.view.activity.fragment.BaseFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.ContactsNewManagerFragment;
 import com.bs.lk.newoamvptest.view.activity.fragment.UserDetailInfoFragment;
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 /**
@@ -45,16 +42,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         }
         View view = LayoutInflater.from(mcontext).inflate(R.layout.user_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.llUserItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                UserNewBean user = mUsersList.get(position);
-                Bundle bundle = new Bundle();
-                bundle.putInt(BaseFragment.PARAM_CHILD_TYPE, ContactsNewManagerFragment.CHILD_TYPE_USERINFO);
-                bundle.putSerializable(UserDetailInfoFragment.PARAM_USER, user);
-                mPreFragment.showChildFragment(bundle);
-            }
+        holder.llUserItem.setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            UserNewBean user = mUsersList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putInt(BaseFragment.PARAM_CHILD_TYPE, ContactsNewManagerFragment.CHILD_TYPE_USERINFO);
+            bundle.putSerializable(UserDetailInfoFragment.PARAM_USER, user);
+            mPreFragment.showChildFragment(bundle);
         });
         return holder;
     }
@@ -77,7 +71,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         LinearLayout llUserItem;
         ImageView userImage;
         TextView userName;
-        public ViewHolder(View view){
+        ViewHolder(View view){
             super(view);
             llUserItem = view.findViewById(R.id.ll_user_item);
             userImage = view.findViewById(R.id.iv_head);

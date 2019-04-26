@@ -22,12 +22,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.bs.lk.newoamvptest.CApplication;
 import com.bs.lk.newoamvptest.Interface.IOAInterfaceV3Service;
 import com.bs.lk.newoamvptest.R;
-import com.bs.lk.newoamvptest.base.mvp.Imodel;
 import com.bs.lk.newoamvptest.bean.ApkUrlAndVersionBean;
-import com.bs.lk.newoamvptest.bean.SessionBean;
+import com.bs.lk.newoamvptest.bean.SessionGsonFormatBean;
 import com.bs.lk.newoamvptest.model.ILoginModel;
 import com.bs.lk.newoamvptest.util.NetUtils;
-import com.bs.lk.newoamvptest.util.WebServiceUtil;
 import com.bs.lk.newoamvptest.util.file.FileOpenHelper;
 
 import java.io.File;
@@ -38,7 +36,7 @@ import java.net.URL;
 
 import io.reactivex.Observable;
 
-import static com.bs.lk.newoamvptest.util.NetUtils.upDatePath;
+import static com.bs.lk.newoamvptest.util.NetUtils.UPDATE_PATH;
 
 /**
  * @author lk
@@ -286,7 +284,7 @@ public class UpdateManager extends ILoginModel {
     }
 
     @Override
-    public Observable<SessionBean> loadAndroidVersion(String url, int type) {
+    public Observable<SessionGsonFormatBean> loadAndroidVersion(String url, int type) {
         return null;
     }
 
@@ -301,7 +299,7 @@ public class UpdateManager extends ILoginModel {
         protected ApkUrlAndVersionBean doInBackground(Void... params) {
 
             try {
-                resp = NetUtils.requestByPost("",upDatePath);
+                resp = NetUtils.requestByPost("",UPDATE_PATH);
                 Log.e("服务器APK版本号：",""+resp);
                 apkUrlAndVersion = JSONObject.parseObject(resp, ApkUrlAndVersionBean.class);
             } catch (Throwable throwable) {
